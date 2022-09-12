@@ -1,0 +1,60 @@
+<div class="ernpt_seciton">
+  <div class="section">
+    <div class="ernpt_header">
+      <h3>{{ section.settings.heading }}</h3>
+    </div>
+
+    <div class="ernpt_flx">
+      {%  for block in section.blocks %}
+        <div class="ernpt_item">
+          {%  if block.settings.icon != blank %}
+          <div class="ernpt_icon">
+            <img src="{{ block.settings.icon | img_url: 'master' }}" alt="{{ block.settings.icon.alt }}"/>
+          </div>
+          {%  endif %}
+         <div class="ernpt_txt">{{ block.settings.text }}</div>
+          
+        </div>
+      {%  endfor %}
+    </div>
+    
+  </div>
+</div>
+
+
+{% schema %}
+  {
+    "name": "Earn Points",
+    "settings": [
+      {
+        "type": "text",
+        "id": "heading",
+        "label": "heading"
+      } 
+    ],
+    "blocks":[
+      {
+        "type": "points",
+        "name": "points",
+        "settings":[
+          {
+            "type": "image_picker",
+            "id": "icon",
+            "label": "icon"
+          },
+           {
+            "type": "richtext",
+            "id": "text",
+            "label": "text"
+          }
+        ]
+      }
+    ],
+    "presets":[
+      {
+        "name": "Earn Points"
+      }
+    ]
+  }
+{% endschema %}
+ 

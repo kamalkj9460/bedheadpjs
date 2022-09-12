@@ -1,0 +1,191 @@
+<div class="min_cart">
+  <div class="min_bg"></div>
+  
+  <div class="min_cart_inner">
+  <div class="min_cart_close">{% render 'icon', name: 'plus' %}</div>
+    <div class="mmc_header">
+      <div class="mmc_shipping"><div id="fsb_placeholder"></div></div>
+      <div class="mmc_heading_title" tabindex="0">SHOPPING CART</div>
+    </div>
+    
+     <form action="{{ routes.cart_url }}" method="post">
+        <div class="mmc_item_box ">
+          {% for item in cart.items %}
+            {% unless item.product.title == 'Gift Box' %}
+              <div class="mmc_items">
+                <div class="mmc_img">
+                   <a href="{{ item.url }}" title="{{ item.title | escape }}" class="cart_page_image">
+                      {%
+                        render 'image-element',
+                        image: item.image,
+                        alt: item.title,
+                        object_fit: true,
+                        max_height: 150
+                      %}
+                    </a>
+                </div>
+                <div class="mmc_detail">
+                  <div class="mmc_title"><a href="{{ item.url}}"> {{ item.title}}</a> </div>
+
+                  {% comment %}
+                  {% unless item.variant.title contains "Title" %}
+                          <p class="item__properties">
+                            {% for option in item.product.options %}
+                              <span>{{ option }}:</span> <span>{{ item.variant.options[forloop.index0] }}</span><br />
+                            {% endfor %}
+                          </p>
+                        {% endunless %}
+                  {% endcomment %}
+
+                    {% if item.properties %}
+                          <p>
+                            {% for p in item.properties %}
+                              {% unless p.last == blank %}
+                                {% if p.last contains '/uploads/' %}
+                                  <div>
+                                    {{ p.first }}: <a class="lightbox" href="{{ p.last }}">{{ 'cart.general.uploaded_file' | t }}</a>
+                                  </div>
+                                {% else %}
+                                  <div>
+                                    {{ p.first }}: {{ p.last }}
+                                  </div>
+                                {% endif %}
+                              {% endunless %}
+                            {% endfor %}
+                          </p>
+                        {% endif %}
+
+                  <div class="mmc_price"  tabindex="0"> {{ item.price | money}} </div>
+
+                   <div class="mmc_qty"  data-line-item-key={{ forloop.index }}>
+                     <div aria-label="Cart quantity minus"  class="mmc_sign mmc_min">{% render 'icon', name: 'minus' %}</div>
+                     <input class="quantity-input" data-id="{{ item.id}}"  type="text" name="quantity" value="{{ item.quantity }}" data-line-id="{{ forloop.index }}">
+                      <div aria-label="Cart quantity plus" class="mmc_sign mmc_plus">{% render 'icon', name: 'plus' %}</div>
+                   </div>
+
+              
+                  {% unless item_is_giftbox %}
+
+                         {% assign g_name = 'Gift Note for ' | append:item.title %} 
+                         {% assign gift = false %} 
+                         {% assign gift_txt = '' %}
+
+                         {% for attribute in cart.attributes %}
+                          {% assign first_title =  attribute | first %}
+
+                          {% if g_name == first_title %} 
+                            {% assign gift = true %}
+                            {% assign gift_txt = attribute | last %}
+                          {% endif %}
+                         {% endfor %}
+
+
+                         <div class="giftwrap-option" data-id="{{ item.id}}" data-va="{{ gift}}">
+
+                           <button class="giftwrap_btn {% if gift %}active{% endif %}" data-qty="{{ item.quantity }}"  data-val="Gift Note for {{item.title}}"  aria-label="Complimentary Gift Box">
+                             <span class="giftwrap_check"></span>
+                             <span class="giftwrap_txt" >Complimentary Gift Box</span>
+                           </button>
+
+
+                           </div> 
+                           <div class="gift-note-field"
+                                style="{% if gift %}display:block;{% endif %}"
+                                > 
+                             <label for="gift-note">Gift Note (Optional)</label> 
+                             <textarea id="gift-note" data-id="{{ item.id}}"  data-val="Gift Note for {{item.title}}"
+                                       {% if gift %}
+                                       name="attributes[Gift Note for {{item.title}}]" 
+                                       {% endif %}
+                                       placeholder="For my dearest...">{{ gift_txt}} </textarea> 
+                           </div> 
+                      {% endunless %}
+
+                </div>
+
+                <div class="mmc_close" data-id="{{ routes.cart_change_url }}?line={{ item_index }}&quantity={{ item.quantity | minus: 1 }}">
+                   <button class="close remove_item" tabindex="0" aria-label="Remove item" data-line="{{ forloop.index }}">
+                        {%
+                          render 'icon',
+                          name: 'x'
+                        %}
+                      </button>
+                </div>
+
+              </div>
+            {% endunless %}
+          {% endfor %}
+        </div>
+
+      <div class="ajct_crossSell_outer">
+        <div class="ajct_crossSell">
+           <div class="sideCart__featured emptyHide" >
+            <div class="h4">{{ settings.cart_heading_text | escape }}</div>
+            {% assign collection = collections[settings.featured_product_collection_cart] %}
+            <div class="SideCart__featured__products">
+              {% for product in collection.products limit: 3 %}
+                <div class="SideCart__item">
+                  <a href="{{ product.url | within: collection }}">
+                    <img src="{{product.featured_image.src | img_url: '450x' }}" alt="{{product.featured_image.src.alt }}"/>
+
+                    <div class="ajct_price">{{ product.price | money }}</div>
+                  </a>
+                </div>
+              {% endfor %}
+            </div>
+          </div>
+         </div>
+
+        </div>
+
+      <div class="mmc_footer">
+        <div class="mmc_total">
+         <div class="mmc_title mmc_footer_txt" tabindex="0">{{ 'cart.general.subtotal' | t }}:</div>
+          <div class="mmc_total_price mmc_footer_txt" tabindex="0">{{ cart.total_price | money }}</div>
+
+            {%- capture taxes_shipping_checkout -%}
+            {%- if cart.taxes_included and shop.shipping_policy.body != blank -%}
+            {{ 'cart.general.taxes_included_and_shipping_policy_html' | t: link: shop.shipping_policy.url }}
+            {%- elsif cart.taxes_included -%}
+            {{ 'cart.general.taxes_included_but_shipping_at_checkout' | t }}
+            {%- elsif shop.shipping_policy.body != blank -%}
+            {{ 'cart.general.taxes_and_shipping_policy_at_checkout_html' | t: link: shop.shipping_policy.url }}
+            {%- else -%}
+            {{ 'cart.general.tax_and_shipping' | t }}
+            {%- endif -%}
+            {%- endcapture -%}
+
+          </div>
+        
+         <button tabindex="0" href="/checkout" value="{{ 'cart.general.checkout' | t }}" name="checkout"  class="button add_to_cart checkout"> 
+            {% if settings.show_lock_icon %}
+                                {%
+                                  render 'icon',
+                                  name: 'lock'
+                                %}
+                              {% endif %}
+            {{ 'cart.general.checkout' | t }}
+          </button>
+        
+         <p class="mmc_footer_txt cart__taxes-shipping-message has-padding-bottom">{{ taxes_shipping_checkout }}</p>
+        </div>
+    
+    </form>
+    
+      
+  </div>
+</div>
+
+<script>
+  /*
+  $(document).ready({
+    $.ajax({
+                  type: "POST",
+                  url: '/cart/update.js',
+                   data: 'attributes[Gift Note for Dahlia Shadows Long Sleeve Classic Woven Cotton Sateen PJ Set - L]=' 
+              });
+  });
+  */
+</script>
+
+ 

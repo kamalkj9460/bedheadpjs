@@ -1,0 +1,33 @@
+
+<div id="product-badges">
+    <div style="display:none;"><img id="PickFeaturedImage" src="{{ product.featured_image | img_url: '1024x1024' }}" alt="Featured-image"></div>
+
+      {% if original==true %}
+          <span style="display: inline;">
+              <img src="{{ "ORIGINAL-FIT-STAMP-v2.png" | asset_url }}" alt="ORIGINAL FIT STAMP"/>
+            {% comment %}
+                  | file_img_url: 'master' 
+                  | img_tag: 'Original Fit!', 'Product-fit__badges product__badge--image-pdp' }}
+            {% endcomment %}
+          </span>
+      {% endif %}
+      {% if GrownCotton==true %}
+          <span style="display: inline;">
+              <img src="{{ "ORGANICALLY-GROWN-COTTON-STAMP.png" | asset_url }}" alt="ORIGINAL GROWN COTTON STAMP"/>
+            	{% comment %}
+                  | file_img_url: 'master' 
+                  | img_tag: 'Organically Grown Cotton', 'cotton-grow__badge product__badge--image-pdp' }}
+            	{% endcomment %}
+          </span>
+      {% endif %}
+    {% if GoldenGirls==true %}
+          <span style="display: inline;">
+              <img src="{{ "GOLDEN-GIRLS-STAMP-01.png" | asset_url }}" alt="ORIGINAL GIRLS STAMP"/>
+            	{% comment %}
+                  | file_img_url: 'master' 
+                  | img_tag: 'Golden Girls', 'golden-girls__badge product__badge--image-pdp' }}
+                {% endcomment %}
+          </span>
+      {% endif %}
+  </div>
+

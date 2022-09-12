@@ -1,0 +1,1389 @@
+  
+{% comment %}
+** Product - image scroll view **
+- Product template
+{% endcomment %}
+
+{% assign id = section.id %}
+{% comment %} Layout {% endcomment %}
+{% assign width = section.settings.width %}
+{% assign padding_top = section.settings.padding_top %}
+{% assign padding_bottom = section.settings.padding_bottom %}
+{% comment %} Advanced {% endcomment %}
+{% assign css_class = section.settings.css_class %}
+{% assign custom_css = section.settings.custom_css %}
+
+{% comment %} Section specific CSS {% endcomment %}
+{% style %}
+  #shopify-section-{{ id }} {
+    padding-top: {{ padding_top }}px;
+    padding-bottom: {{ padding_bottom }}px;
+    {% if width == 'wide' %}
+      width: 100%;
+    {% endif %}
+  }
+
+  {% render 'css-loop',
+          css: custom_css,
+          id: id
+  %}
+{% endstyle %}
+
+{% assign collection_handles = product.collections | map: 'handle' %}
+{% liquid
+  assign selected_variant = product.selected_variant
+
+  if product.variants.size == 1 or settings.select_first_available_variant
+    assign selected_variant = product.selected_or_first_available_variant
+  endif
+%}
+{% assign product_tags = product.tags | join: ' ' %}
+
+
+
+{% assign washType = '' %}
+
+{% for tag in product.tags %}
+    {% if tag == 'Machine Wash Cold' %}
+        {% assign washType = section.settings.mwc_text %}
+    {% endif %}
+    {% if tag == "New" %}
+        {% assign newTag = true %}
+    {% endif %}
+    {% if tag == 'Machine Wash Warm' %}
+        {% assign washType = section.settings.mww_text %}
+    {% endif %}
+    {% if tag == 'Hand Wash' %}
+        {% assign washType = section.settings.hw_text %}
+    {% endif %}
+    {% if tag == 'Hand Wash New' %}
+        {% assign washType = section.settings.hwnew_text %}
+    {% endif %}
+    {% if tag == 'Do Not Wash' %}
+        {% assign washType = section.settings.dnw_text %}
+    {% endif %}
+    {% if tag == 'Imported' %}
+        {% assign imported = true %}
+    {% endif %}
+    {% if tag == 'noReturns' %}
+        {% assign noReturns = true %}
+    {% endif %}
+    {% if tag contains 'sizechart' %}
+        {% assign sizechart = tag | split:'_' | last %}
+        {% assign sizechartPage = tag | split:'_' | last %}
+    {% endif %}
+    {% if tag contains 'hide-size-conversion' %}
+        {% assign showControls = false %}
+    {% endif %}
+    {% if tag contains 'original-fit' %}
+        {% assign showOriginalFitBadg = true %}
+    {% endif %}
+    {% if tag contains 'grown-cotton' %}
+        {% assign showGrownCottonBadg = true %}
+    {% endif %}
+    {% if tag contains 'golden-girls' %}
+        {% assign showGoldenGirlsBadg = true %}
+    {% endif %}
+    {% if tag contains 'preorder2021' %}
+        {% assign preorderText = true %}
+    {% endif %}
+    {% if tag contains 'freegift-nobuybutton' %}
+        {% assign freegift_nobuybutton = true %}
+    {% endif %}
+    {% if tag contains 'freegiftnopdp' %}
+        {% assign no_pdp = true %}
+    {% endif %}
+{% endfor %}
+
+<script>
+  var selected_variant = null;
+  selected_variant = {{ selected_variant | img_url: '100x100' | json }};
+</script>
+
+{% comment %} HTML markup {% endcomment %}
+<section class="section
+                is-width-{{ width }}
+                {{ css_class }}
+                " tabindex="-1" aria-hidden="true">
+  <div class="product-{{ product.id }} has-padding-top">
+    <div class="product_section
+                js-product_section
+                container
+                is-justify-space-between
+                {% if section.settings.product_images_position == 'right' %}
+                  is-flex-row-reverse
+                {% endif %}">
+
+    <div class="product__images
+                one-half
+                column
+                medium-down--one-whole
+                ">
+       <div class="box">
+                        {% render 'product-badges', product: product, original: showOriginalFitBadg, GrownCotton: showGrownCottonBadg, GoldenGirls: showGoldenGirlsBadg %}
+      </div>
+      {%
+        render 'product__images',
+        product: product,
+        display_thumbnails: section.settings.display_thumbnails,
+        enable_thumbnail_slider: section.settings.enable_thumbnail_slider,
+        product_height: section.settings.product_height,
+        set_product_height: section.settings.set_product_height,
+        video_looping: section.settings.video_looping,
+        slideshow_transition: section.settings.slideshow_transition,
+        enable_product_lightbox: section.settings.enable_product_lightbox,
+        enable_zoom: section.settings.enable_zoom
+      %}
+    </div>
+
+      <div class="product__information
+                  has-product-sticker
+                  one-half
+                  column
+                  medium-down--one-whole">
+        <div class="sticky-product-scroll">
+          {% comment %} Sale sticker {% endcomment %}
+          {% if settings.stickers_enabled %}
+            {% render 'product-thumbnail__sticker',
+                    context: 'pr oduct',
+                    collection_handles: collection_handles
+            %}
+          {% endif %}
+
+        {%- for block in section.blocks -%}
+          <div class="product-block
+                      product-block--{{ block.type | downcase | replace: '_', '-' }}
+                      {% if forloop.first == true %}
+                        product-block--first
+                      {% endif %}"
+                      {{ block.shopify_attributes }}>
+            
+           {% if block.type == 'product_list' %}
+            
+              
+             
+              <div class="product_accoudion">
+                
+               
+                  {% assign description = product.description | split: '<h5>' | first %} 
+                {% if description == '' %}
+                	{% assign first_dp =  product.description %} 
+                {% else %}
+                	{% assign first_dp =  product.description | remove: description %} 
+                {% endif %}
+                
+                {% assign description_first =  first_dp | split: '<h5>' %}
+                {% assign description_two =  first_dp | split: '</h5>' %}
+                 
+                {% unless description == '' %}
+                  <div class="description_top" tabindex="0">
+                    {{ description }}
+                  </div>
+                 {% endunless %}
+                
+                {% for d_f in description_first %}
+                {% assign heading = d_f | split: '</h5>' | first %}
+                    {% if heading != blank %}
+                    <div class="pdacd_item" >
+                      <div class="pdacd_heading " >
+                        <span class="pdacd_heading_txt"  tabindex="0"> {{ heading }}  </span>
+                        <div aria-label="drop down icon" class="pdacd_heading_sign">+</div> 
+                      </div>
+                      <div class="pdacd_description" tabindex="0">
+                          {{ description_two[forloop.index0] | split: '<h5>' | first }}
+                      </div>
+                    </div>
+                    {% endif %}
+                 {% endfor %}
+                
+                
+                {% if washType != '' %}
+                <div class="pdacd_item" >
+                     <div class="pdacd_heading " >
+                          <span class="pdacd_heading_txt"  tabindex="0"> {{ 'PRODUCT CARE' }} </span>
+                         <div aria-label="drop down icon" class="pdacd_heading_sign">+</div> 
+                    </div>
+                     <div class="pdacd_description" tabindex="0">
+                         {{ washType }} 
+                      </div>
+                </div>
+                {% endif %}
+                
+                {% if block.settings.heading != blank %}
+                <div class="pdacd_item" >
+                     <div class="pdacd_heading ">
+                         <span href="#{{ block.settings.heading | handle}}" class="pdacd_heading_txt" tabindex="0" href="{{block.settings.url }}">  {{ block.settings.heading }}  </span>
+                         <div aria-label="drop down icon" class="pdacd_heading_sign">+</div> 
+                    </div>
+                     <div class="pdacd_description" tabindex="0">
+                         {{ block.settings.description }} 
+                      </div>
+                </div>
+                {% endif %}
+                
+                 {% unless sizechart == blank %}
+                <div class="pdacd_item" >
+                     <div class="pdacd_heading " >
+                         <span href="#{{ 'Size Guide'  | handle }}" class="pdacd_heading_txt" data="size_chart_sidebtn" tabindex="0" data-page-handle="{{ sizechart }}"> {{ 'Size Guide' }} </span>
+                         <div aria-label="drop down icon" class="pdacd_heading_sign" >+</div> 
+                    </div>
+                     <div class="pdacd_description" tabindex="0">
+                          
+                       <div class="section_chart size-chart">
+                         <h3 tabindex="0"> {{ pages[sizechartPage].title }}</h3>
+
+                         {% assign guideTitle = page.title %}
+                          {% if guideTitle contains "Women's" %}
+                            <p tabindex="0">When selecting your size, please note our pajamas have a relaxed and casual fit, allowing for a more comfortable experience.</h3>
+                            {% elsif guideTitle contains "Kid's" %}
+                            <p tabindex="0"> We suggest ordering one size up as our children and infant pajamas are designed with a snug fit.</p>
+                          {% else %}
+                            <p tabindex="0">Our pajamas are designed to comfortably fit the below measurements.</p>
+                          {% endif %}
+
+                          <div class="unit-controls nav_sizeChart">
+                            <button type="button" data-unit="metric" class="unit-control metric"  tabindex="0" >CM</button>
+                            <button type="button" data-unit="imperial" class="unit-control imperial selected"  tabindex="0">IN</button>
+                          </div>
+		
+                        	<div class="sizechartPage" tabindex="0">
+                              {{ pages[sizechartPage].content }}
+                       		</div>
+                        </div>
+                       
+                       
+                      </div>
+                </div>
+                {% endunless %}
+                
+                  
+               {% comment %} 
+                {% assign size_page = '' %} 
+                
+                 {% assign heading = 'heading_4'  %}
+                 {% assign description = 'description_4' %}
+                 {% assign page = 'page_4' %}
+                 {% assign size_chart = 'size_chart_4'  %}
+
+               
+                {% if block.settings[heading] != blank %}
+                  <div class="pdacd_item" tabindex="0">
+                     <div class="pdacd_heading " tabindex="0">
+                       <div class="pdacd_heading_txt {% if block.settings[size_chart] %} size_chart_sidebtn {% endif %}">  {{ block.settings[heading] }}</div>
+                       <div class="pdacd_heading_sign">+</div>
+                    </div>
+                    <div class="pdacd_description">
+                      {% if block.settings[page] != blank %}
+                     	 {% assign page = block.settings[page] %} 
+                      	 {{ pages[page].content}} 
+                      
+                       {% if block.settings[size_chart] %}
+                         {% assign size_page = pages[page].content %}
+                      {% endif %}
+                
+                      
+                      {% else %}
+                      	{{ block.settings[description] }}
+                      {% endif %}
+                    </div>
+                  </div>
+                {% endif %}
+			  {% endcomment %}
+                
+                
+              </div>
+           
+          {% endif %}
+             
+             
+          {%- if block.type == 'vendor' -%}
+            {% comment %} Vendor {% endcomment %}
+            <p class="vendor">
+              <span class="vendor">{{ product.vendor | link_to_vendor }}</span>
+            </p>
+
+          {%- elsif block.type == 'sku' -%}
+            {% comment %} Sku {% endcomment %}
+            <p class="sku">{{ selected_variant.sku }}</p>
+
+          {%- elsif block.type == 'title' -%}
+            {% comment %} Name {% endcomment %}
+            <h1 class="product_name title" tabindex="0">
+              {% if section_id == 'quickshop' %}
+                <a href="{{ product.url }}">{{ product.title }}</a>
+              {% else %}
+              <a href="{{ product.url }}">{{ product.title }}</a>
+              {% endif %}
+            </h1>
+
+          {%- elsif block.type == 'size-chart' -%}
+            {% comment %} Size chart {% endcomment %}
+            {% for tag in product.tags %}
+              {% if tag contains 'meta-size-chart-' %}
+                {% assign meta-size-chart = true %}
+              {% endif %}
+            {% endfor %}
+
+            {% comment %} Size chart Mobile {% endcomment %}
+            {% if block.settings.size_chart != blank or meta-size-chart %}
+              <a href="javascript:;" class="product__size-chart size-chart--medium-down" data-fancybox data-src="#size-chart{{ product.id }}" data-type="inline">{{ 'products.product.size_chart' | t }} {% render 'icon', name: 'right-caret' %}</a>
+              {% render 'popup-size-chart', product_id: product.id %}
+            {% endif %}
+            {% comment %} Size chart {% endcomment %}
+            {% if block.settings.size_chart != blank or meta-size-chart %}
+              <a href="javascript:;" class="product__size-chart medium-down--hidden" data-fancybox data-src="#size-chart{{ product.id }}" data-type="inline">{{ 'products.product.size_chart' | t }} {% render 'icon', name: 'right-caret' %}</a>
+              {% render 'popup-size-chart', product_id: product.id %}
+            {% endif %}
+
+          {%- elsif block.type == 'price' -%}
+            {% comment %} Price {% endcomment %}
+            <div class="modal_price subtitle" data-display-savings="{{ block.settings.display_savings }}">
+             
+              
+              {% comment %}Inject @pixelunion/shopify-price-ui/price-ui begin{% endcomment %}
+              <div class="price-ui price-ui--loading price-container" data-price-ui>
+                <noscript>
+                  <style>
+                    .price-ui--loading {
+                      display: block !important;
+                      opacity: 1 !important;
+                    }
+                  </style>
+                </noscript>
+                {% assign compare_at_price = false %}
+             
+                {% if product.compare_at_price and product.compare_at_price != product.price %}
+                  {% if product.compare_at_price_varies %}
+                    {%- capture price_min -%}
+                      {%-
+                        render 'price-ui-templates',
+                        template: 'price-min',
+                        value: product.compare_at_price_min,
+                      -%}
+                    {%- endcapture -%}
+              
+                    {%- capture price_max -%}
+                      {%-
+                        render 'price-ui-templates',
+                        template: 'price-max',
+                        value: product.compare_at_price_max,
+                      -%}
+                    {%- endcapture -%}
+              
+                    {%- assign compare_at_price = 'product.price.range_html' | t: price_min: price_min, price_max: price_max -%}
+                  {% else %}
+                    {%- capture compare_at_price -%}
+                      {%-
+                        render 'price-ui-templates',
+                        template: 'price',
+                        value: product.compare_at_price,
+                      -%}
+                    {%- endcapture -%}
+                  {% endif %}
+                {% endif %}
+              
+                {% if product.price_varies %}
+                  {%- capture price_min -%}
+                    {%-
+                      render 'price-ui-templates',
+                      template: 'price-min',
+                      value: product.price_min,
+                    -%}
+                  {%- endcapture -%}
+              
+                  {%- capture price_max -%}
+                    {%-
+                      render 'price-ui-templates',
+                      template: 'price-max',
+                      value: product.price_max,
+                    -%}
+                  {%- endcapture -%}
+              
+                  {%- assign price = 'product.price.range_html' | t: price_min: price_min, price_max: price_max -%}
+                {% else %}
+                  {%- capture price -%}
+                    {%-
+                      render 'price-ui-templates',
+                      template: 'price',
+                      value: product.price,
+                    -%}
+                  {%- endcapture -%}
+                {% endif %}
+              
+                {%-
+                  render 'price-ui-templates',
+                  template: 'price-ui',
+                  compare_at_price: compare_at_price,
+                  price: price,
+                  unit_pricing: false,
+                -%}
+                 
+              </div>
+              {% comment %}Inject @pixelunion/shopify-price-ui/price-ui end{% endcomment %}
+                
+             
+              
+              {% assign data = product.variants[0].sku | split: '-' %}
+    			{%- assign prodcutId = product.id -%}
+               <div id="preproduct-pledge" data-id="{{product.id}}" style="text-align:left!important;"></div> <script type="lazyload2"> var ppxhr=new XMLHttpRequest,preproductDiv=document.getElementById("preproduct-pledge");shopify_product_id=preproductDiv.dataset.id,ppxhr.open("GET","https://preproduct.onrender.com/api/preproducts/"+shopify_product_id+".json"),ppxhr.send(),ppxhr.onload=function(){if(ppxhr.status>=200&&ppxhr.status<300&&204!=ppxhr.status&&"active"==JSON.parse(ppxhr.responseText).test_status){window.PP_storedButtons=[];let n=preproductDiv,o=window.ppParentsDeep||3;for(;o>0;o--)n.parentElement&&(n=n.parentElement);for(var t=n.getElementsByTagName("button"),e=t.length-1;e>=0;e--)window.PP_storedButtons.push(t[e]);Array.from(n.getElementsByTagName("input")).forEach(t=>{"submit"==t.type&&window.PP_storedButtons.push(t)});for(var s=n.getElementsByClassName("shopify-payment-button"),p=s.length-1;p>=0;p--)(s[p].type="button")&&window.PP_storedButtons.push(s[p]);window.PP_storedButtons.forEach(function(t){t.className.includes("search")||t.className.includes("wsl")||t.className.includes("pp-no-hide")||t.id.includes("menu")||t.id.includes("close")||(t.style.display="none")})}};  </script>
+              
+                   <div class="feefo-product-review-aggregated" data-product-sku="{{ prodcutId }}"
+                             data-scroll="true" style="display: none;">
+                            <div class="feefo-review-agg"><span class="agg-count">0</span> Review<span
+                                        class="plural-number">s</span></div>
+                            <div class="feefo-rating-wrapper">
+                                <div class="empty-stars">
+                                    <i class="fa fa-star-o"></i>
+                                    <i class="fa fa-star-o"></i>
+                                    <i class="fa fa-star-o"></i>
+                                    <i class="fa fa-star-o"></i>
+                                    <i class="fa fa-star-o"></i>
+                                </div>
+                                <div class="filled-stars" style="width: 100%">
+                                    <i class="fa fa-star"></i>
+                                    <i class="fa fa-star"></i>
+                                    <i class="fa fa-star"></i>
+                                    <i class="fa fa-star"></i>
+                                    <i class="fa fa-star"></i>
+                                </div>
+                            </div>
+                        </div>
+
+            </div>
+
+          {%- elsif block.type == 'description' -%}
+            
+           
+            {% comment %} Description {% endcomment %}
+            {% if product.description != blank %}
+              <div class="description content   aaaaaaa">
+                {{ product.description | split: '<!-- split -->' | first }}
+              </div>
+            {% endif %}
+
+          {%- elsif block.type == 'form' -%}
+            
+             
+            
+            {% comment %} Purchase form {% endcomment %}
+            <div class="product-form-container ">
+
+              {% comment %} Notify form {% endcomment %}
+              {% render 'product__notify-me-form', product: product %}
+
+              {% comment %} Product form {% endcomment %}
+              {% unless collection_handles contains 'coming-soon' %}
+                {%
+                  render 'product__form',
+                  context: 'product',
+                  product: product,
+                  sold_out_options: sold_out_options,
+                  selected_variant: selected_variant,
+                  show_payment_button: block.settings.show_payment_button,
+                  collection_handles: collection_handles
+                %}
+              {% endunless %}
+            </div>
+
+          {%- elsif block.type == 'product-links' -%}
+            {% comment %} Collections, type, tags {% endcomment %}
+            {% if block.settings.show_collections or block.settings.show_tags or block.settings.show_type %}
+              <div class="product__classification-links has-padding-top">
+                {% if block.settings.show_collections %}
+                  <p class="product__collections-list tags">
+                    <span class="product__classification-title">{{ 'products.product.collections' | t }}:</span>
+                    {% for col in product.collections %}
+                      <span class="tag tag--{{ tag_style }}">
+                        <a href="{{ col.url }}" title="{{ col.title }}">{{ col.title }}</a>
+                      </span>
+                    {% endfor %}
+                  </p>
+                {% endif %}
+
+                {% if block.settings.show_type %}
+                  <p class="product__type-list tags">
+                    <span class="product__classification-title">{{ 'products.product.product_types' | t }}:</span>
+                    <span class="tag tag--{{ tag_style }}">{{ product.type | link_to_type }}</span>
+                  </p>
+                {% endif %}
+
+                {% if block.settings.show_tags and product.tags.size > 0 %}
+                  <p class="product__tags-list tags">
+                    <span class="product__classification-title">{{ 'products.product.tags' | t }}:</span>
+                    {% for tag in product.tags %}
+                      {% unless tag contains 'meta-' %}
+                        <span class="tag tag--{{ tag_style }}">
+                          <a href="{{ routes.collections_url }}/{% if collection %}{{ collection.handle }}{% else %}all{% endif %}/{{ tag | handle }}" title="{{ 'products.product.products_tagged' | t: tag: tag }}">{{ tag }}</a>
+                        </span>
+                      {% endunless %}
+                    {% endfor %}
+                  </p>
+                {% endif %}
+              </div>
+            {% endif %}
+
+          {%- elsif block.type == 'share' -%}
+            {% comment %} Social share icons {% endcomment %}
+            <div class="product__social-share has-padding-top">
+              {% render 'social-share-buttons' %}
+            </div>
+
+          {%- elsif block.type == 'text' -%}
+            {% comment %} Text {% endcomment %}
+            <div class="product-text">
+              {{ block.settings.text }}
+            </div>
+
+          {%- endif -%}
+
+        {%- endfor -%}
+
+      </div>
+    </div>
+
+  </div>
+  
+</section>
+
+
+  
+<div class="container l" tabindex="0" >
+   <div id="feefo-product-review" data-product-sku="{{ prodcutId }}"></div>
+   <div id="review-stars-anchor">
+    <div id="vue-feefo-reviews-rating-content-wrapper" v-if="canShow">
+        <h3 class="Product__related-products-heading center s-hide" tabindex="0" aria-label="CUSTOMER REVIEWS">CUSTOMER REVIEWS</h3>
+        <div class="reviews-header">
+          <div class="reviews-header-stars">
+            <div class="feefowidget-rating-wrapper">
+              <div class="review-star-rating-wrapper">
+                <div class="review-star-rating" :style="{ width: (starsRating * 20) + '%' }">
+                  <div class="review-star-rating-live">
+                    <span data-rate="1"></span>
+                    <span data-rate="2"></span>
+                    <span data-rate="3"></span>
+                    <span data-rate="4"></span>
+                    <span data-rate="5"></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div tabindex="0" >${ starsRating } of 5 stars</div>
+          </div>
+          <div>
+            <div class="reviews-header-percent">
+              <div class="reviews-header-percent-item">${ (starsRating * 20) }%</div>
+              <div class="reviews-header-percent-text">would recommend</div>
+            </div>
+          </div>
+        </div>
+        <button class="reviews-collapse-btn" :class="{ active: !isHiddenMobile }" @click="isHiddenMobile = !isHiddenMobile">
+          CUSTOMER REVIEWS
+          <span class="triangle"></span>
+        </button>
+        <div class="review-collapse-wrapper" :class="{ active: !isHiddenMobile }">
+          <div class="review-btn-wrapper">
+            <!-- <button class="review-btn-popular" @click="changeOrder('%2Dupdated_date')">Last</button>
+            <button class="review-btn-popular" @click="changeOrder('%2Dhelpful')">Popular</button> -->
+          </div>
+          <div class="review-row-wrapper">
+            <div class="review-row" v-for="(review, index) in reviews" :data-review-id="review.id">              
+              <div class="review-row-right-block">
+                <span class="feefo-author" tabindex="0" >${ review.customerName }</span>
+                <div class="review-star-rating-wrapper">                  
+                  <div class="review-star-rating" :style="{ width: review.starRating + '%' }">
+                    <div class="review-star-rating-live">
+                      <span data-rate="1"></span>
+                      <span data-rate="2"></span>
+                      <span data-rate="3"></span>
+                      <span data-rate="4"></span>
+                      <span data-rate="5"></span>
+                    </div>
+                  </div>
+                </div>
+                <div class="date feefo-time-ago" tabindex="0" >${ review.date }</div>
+                <div class="review-text feefo-review-content">${ review.review }</div>
+                  <div class="links feefo-review-thumbs-count">
+                    <a href="javascript:void(0);" class="helpful">${ review.helpful }<span class="helpful-like"><i class="fa fa-thumbs-up"></i></span></a>
+                    <span class="btn-share-show" @click="toggleSocial(index)" v-show="!review.socialShow">
+                      <i class="fa fa-share"></i>
+                      Share
+                    </span>
+
+                    <span class="social-icon-wrapper" v-show="review.socialShow">
+                        <a :href="review.facebookLink" class="facebook" target="_blank" aria-label="facebook"><i class="fa fa-facebook"></i></a>
+                        <a :href="review.twitterLink" class="twitter" target="_blank" aria-label="twitter"><i class="fa fa-twitter"></i></a>
+                      <span class="btn-share-show" @click="toggleSocial(index)" v-show="review.socialShow">
+                        Cansel
+                      </span>
+                    </span>
+                  </div>
+                </hr>
+                </div>                
+              </div>
+          </div>
+          <div class="reviews-pagination">
+            <span class="reviews-pagination-btn"><a href="javascript:void(0);" v-if="currentPage > 1" @click="prevPage">prev</a></span>
+            <span style="display: none;" v-for="page in pages" :class="{ active: page == currentPage }">
+              <a href="javascript:void(0);" @click="loadPage(page)"><span>${ page }</span></a>
+            </span>
+            <span class="reviews-pagination-btn"><a href="javascript:void(0);" v-if="currentPage < pages" @click="nextPage">next</a></span>
+          </div>
+          <!-- <div class="reviews-pagination-all">
+            <a target="_blank" href="https://www.feefo.com/en-US/reviews/cuddl-duds">Read all reviews</a>
+          </div> -->
+      </div>
+      </div>
+    </div>  
+  <!-- <div id="feefo-product-review-widgetId" class="feefo-review-widget-product" data-product-sku="{{ data | first }}" data-widget-title="My Product Title"></div> -->
+ 
+  </div>
+
+
+{% comment %} Shopify-XR {% endcomment %}
+{% if product.media %}
+  <script>
+    window.ShopifyXR=window.ShopifyXR||function(){(ShopifyXR.q=ShopifyXR.q||[]).push(arguments)}
+      {% assign models = product.media | where: 'media_type', 'model' | json %}
+      ShopifyXR('addModels', {{ models }});
+  </script>
+{% endif %}
+
+<script
+  type="application/json"
+  data-section-id="{{ section.id }}"
+  data-section-data
+>
+  {
+    "display_savings": {{ section.settings.display_savings | json }},
+    "enable_zoom": {{ section.settings.enable_zoom | json }},
+    "enable_product_lightbox": {{ section.settings.enable_product_lightbox | json }},
+    "enable_thumbnail_slider": {{ section.settings.enable_thumbnail_slider | json }},
+    "slideshow_speed": {{ section.settings.slideshow_speed | json }},
+    "slideshow_transition": {{ section.settings.slideshow_transition | json }},
+    "thumbnails_enabled": {{ section.settings.display_thumbnails | json }},
+    "product_media_amount": {{ product.media.size }},
+    "template": "image-scroll"
+  }
+</script>
+<script type="lazyload2" data-src="{{ 'z__jsProduct.js' | asset_url }}"></script>
+<script type="lazyload2" data-src='http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js'></script>
+<script type="lazyload2" data-src="https://api.feefo.com/api/javascript/bedhead-pajamaskomar-sleepwear"></script>
+
+
+<style>
+
+  
+  
+  
+/* Feefo Custom Plugin Styles =====================================================================*/
+  .container.l {
+    max-width: 1117px;
+    width: 100%;
+    display: block;
+}
+.review-stars-product {
+  display: none;
+  justify-content: flex-start;
+  align-items: center; }
+  .review-stars-product .review-stars-product-text {
+    margin-right: 5px; }
+    @media (max-width: 600px) {
+      .review-stars-product .review-stars-product-text {
+        text-decoration: underline; } }
+  @media (max-width: 600px) {
+    .review-stars-product {
+      display: block;
+      text-align: right;
+      margin-bottom: 5px; } }
+
+.review-btn-wrapper {
+  border-bottom: 1px solid #dedede;
+  padding-bottom: 20px; }
+  @media (max-width: 600px) {
+    .review-btn-wrapper {
+      padding-bottom: 0; } }
+  .review-btn-wrapper .review-btn-popular {
+    border-radius: 4px;
+    height: 41px;
+    width: 90px;
+    text-transform: none; }
+    .review-btn-wrapper .review-btn-popular:hover {
+      background-color: transparent;
+      color: #9b9898; }
+    @media (max-width: 600px) {
+      .review-btn-wrapper .review-btn-popular {
+        vertical-align: top; } }
+
+.reviews-header {
+  display: flex;
+  justify-content: space-around;
+  padding: 10px 50px 10px 50px;
+  max-width: 800px;
+  margin: 0 auto 20px auto;
+  border-bottom: 1px solid; }
+  @media (max-width: 600px) {
+    .reviews-header {
+      justify-content: center;
+      margin: 0 auto 5px auto; } }
+  .reviews-header .reviews-header-stars {
+    text-align: center;
+    color: #8c8c8c; }
+    .reviews-header .reviews-header-stars .feefowidget-rating-wrapper {
+      margin-bottom: 5px; }
+  .reviews-header .reviews-header-percent {
+    text-align: center; }
+    @media (max-width: 600px) {
+      .reviews-header .reviews-header-percent {
+        display: none; } }
+    .reviews-header .reviews-header-percent .reviews-header-percent-item {
+      margin-bottom: 4px; }
+    .reviews-header .reviews-header-percent .reviews-header-percent-text {
+      color: #8c8c8c; }
+
+.review-row-wrapper {
+  margin-bottom: 10px;
+  border-bottom: 1px solid #dedede; }
+
+@media (max-width: 600px) {
+  .review-collapse-wrapper {
+    display: none; }
+    .review-collapse-wrapper.active {
+      display: block; } }
+
+.review-row {
+  padding: 20px 0;
+  display: flex; }
+  @media (max-width: 600px) {
+    .review-row {
+      display: block;
+      padding: 10px 0; } }
+  .review-row .review-row-left-block {
+    width: 240px;
+    background-color: #f8f8f8;
+    margin-right: 20px;
+    padding: 10px; }
+    @media (max-width: 600px) {
+      .review-row .review-row-left-block {
+        width: 100%; } }
+  .review-row .review-row-right-block {
+    width: calc(100% - 240px);
+    padding: 20px 0;
+    color: #606060; }
+    @media (max-width: 600px) {
+      .review-row .review-row-right-block {
+        padding: 5px 0 0 0;
+        width: 100%; } }
+    .review-row .review-row-right-block .date {
+      color: #9b9898; }
+    .review-row .review-row-right-block .review-text {
+      margin-bottom: 10px; }
+    .review-row .review-row-right-block .btn-share-show {
+      color: #9b9898;
+      cursor: pointer;
+      margin-left: 5px;
+      font-size: 13px; }
+    .review-row .review-row-right-block .helpful {
+      color: #9b9898; }
+      .review-row .review-row-right-block .helpful .helpful-like {
+        margin-left: 3px; }
+    .review-row .review-row-right-block .social-icon-wrapper {
+      margin-left: 5px; }
+      .review-row .review-row-right-block .social-icon-wrapper .facebook {
+        color: #3b5998;
+        font-size: 20px; }
+      .review-row .review-row-right-block .social-icon-wrapper .twitter {
+        color: #55acee;
+        font-size: 20px; }
+
+.review-star-rating-wrapper {
+  position: relative;
+  display: block;
+  height: 14px;
+  width: 75px;
+  background-image: url("//cdn.shopify.com/s/files/1/2438/9053/t/530/assets/rating_stars.png?v=10801095380233377602");
+  background-position: 0 0;
+  background-repeat: repeat-x;
+  background-size: 15px; }
+  .review-star-rating-wrapper .review-star-rating {
+    height: 14px;
+    background-image: url("//cdn.shopify.com/s/files/1/2438/9053/t/530/assets/rating_stars.png?v=10801095380233377602");
+    background-position: 0 -15px;
+    background-size: 15px; }
+  .review-star-rating-wrapper .review-star-rating-live {
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0; }
+    .review-star-rating-wrapper .review-star-rating-live span {
+      display: block;
+      float: left;
+      width: 15px;
+      height: 14px;
+      background-image: url("//cdn.shopify.com/s/files/1/2438/9053/t/530/assets/rating_stars.png?v=10801095380233377602");
+      background-repeat: no-repeat;
+      background-position: 0 -15px;
+      background-size: 15px; }
+
+.reviews-pagination-btn {
+  display: block; }
+  .reviews-pagination-btn a {
+    display: block;
+    padding: 0 10px;
+    width: 80px;
+    text-align: center;
+    background-color: #000;
+    color: #fff;
+    border-radius: 4px;
+    margin: 0 auto;
+    padding: 4px 0; }
+
+.reviews-pagination-all {
+  text-align: center;
+  margin-top: 5px; }
+  .reviews-pagination-all a {
+    color: #000;
+    text-decoration: underline; }
+    .reviews-pagination-all a:hover {
+      color: #000;
+      text-decoration: underline; }
+
+.reviews-collapse-btn {
+  display: none;
+  width: 100%;
+  color: #000;
+  background-color: #a0dae8;
+  text-transform: none;
+  text-align: left;
+  border-bottom: 1px solid #dedede;
+  position: relative; }
+  @media (max-width: 600px) {
+    .reviews-collapse-btn {
+      display: block;
+      max-width: 100%; }
+      .reviews-collapse-btn.active {
+        background-color: #a0dae8;
+        color: #fff;
+        border-bottom: 1px solid #000; }
+        .reviews-collapse-btn.active .triangle {
+          border-right: 2px solid #fff;
+          border-bottom: 2px solid #fff; } }
+  .reviews-collapse-btn:hover {
+    background-color: #a0dae8;
+    color: #fff;
+    border-bottom: 1px solid #000; }
+  .reviews-collapse-btn .triangle {
+    width: 10px;
+    height: 10px;
+    border-right: 2px solid #000;
+    border-bottom: 2px solid #000;
+    display: block;
+    position: absolute;
+    right: 20px;
+    top: 30%;
+    transform: rotate(45deg); }
+
+</style>
+    
+{% comment %}
+ {% include 'side_side_chart', content:pages[sizechartPage].content, title: pages[sizechartPage].title %}
+ {% endcomment %}
+ 
+<script type="lazyload2">
+  
+
+
+  var app = new Vue({
+      el: '#vue-feefo-reviews-rating-content-wrapper',
+      delimiters: ['${','}'],
+      name:'feefoReviews.vue',
+      data: {
+          productId: '',
+          reviews: [],
+          pages : 1,
+          currentPage : 1,
+          sortMode: '%2Dupdated_date',
+          starsCount: null,
+          starsRating: 0,
+          isHiddenSocial: true,
+          isHiddenMobile: true,
+          monthNames: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
+          canShow: false,
+      },
+      created: function () {
+          this.productId = $('#preproduct-pledge').data('id');
+          this.getStarRating();
+          this.getReviewsContents();
+      },
+      methods: {
+          getStarRating() {
+              fetch('https://api.feefo.com/api/10/reviews/summary/product?since_period=all&unanswered_feedback=exclude&source=on_page_product_integration&merchant_identifier=bedhead-pajamaskomar-sleepwear&origin=bedheadpjs.com&parent_product_sku='+ this.productId)
+                  .then((response) => {
+                      return response.json();
+                  })
+                  .then((response) => {
+                      this.starsCount = response.rating.product.count;
+                      this.starsRating = response.rating.rating;
+                      var count = (this.starsCount == 1)? this.starsCount+' review' : this.starsCount+' reviews';
+                      if(this.starsRating > 3){
+                          $('.review-stars-product').css('display', 'flex');
+                          $('.review-stars-product-text').text(count);
+                          $('.top-review-start-rating').width(this.starsRating*20 + '%');
+                      }
+                  })
+                  .catch();
+          },
+
+          getReviewsContents () {
+              fetch('https://api.feefo.com/api/10/reviews/all?merchant_identifier=bedhead-pajamaskomar-sleepwear&parent_product_sku=' + this.productId + '&sort='+ this.sortMode +'&page=' + this.currentPage)
+                  .then((response) => {
+                      return response.json();
+                  })
+                  .then((response) => {
+                      this.reviews = [];
+                      this.pages = response.summary.meta.pages;
+                      response.reviews.forEach((elem) => { if(elem.products !== undefined){
+                          review = {
+                              id: elem.products[0].id,
+                              customerName: (elem.customer) ? elem.customer.display_name : 'Reliable customer',
+                              date: this.monthNames[new Date(elem.products[0].created_at).getMonth()]+ ' ' +(new Date(elem.products[0].created_at).getDate())+ ', ' +(new Date(elem.products[0].created_at).getFullYear()),
+                              helpful: elem.products[0].helpful_votes,
+                              review: elem.products[0].review,
+                              facebookLink: elem.social.facebook,
+                              twitterLink: elem.social.twitter,
+                              starRating: (elem.products[0].rating.rating * 20),
+                              socialShow: false,
+                          };
+                          this.reviews.push(review);
+                        }
+                      });
+                      if (this.reviews.length) {
+                          this.canShow = true;
+
+                      }
+
+                  })
+                  .catch();
+          },
+
+          toggleSocial(index) {
+              this.reviews[index].socialShow = !this.reviews[index].socialShow;
+          },
+
+          loadPage(page){
+              this.currentPage = page;
+              this.getReviewsContents();
+          },
+          prevPage(){
+              this.currentPage--;
+              this.getReviewsContents();
+          },
+          nextPage(){
+              this.currentPage++;
+              this.getReviewsContents();
+          },
+          changeOrder(mode){
+              this.sortMode = mode;
+              this.getReviewsContents();
+          }
+      }
+  })
+</script>
+
+
+
+{% comment %}
+<script type="text/javascript" src="https://api.feefo.com/api/javascript/merchantidentifier" async></script> 
+<script type="text/javascript" src="https://api.feefo.com/api/javascript/merchantidentifier?tags=language%3DEnglish,store%3DLondon" async></script> 
+<div id="feefo-service-review-widgetId" class="feefo-review-widget-service"></div>
+<div id="feefo-product-review-widgetId" class="feefo-review-widget-product" data-product-sku="product-search-code"></div> 
+<div id="feefo-product-review-widgetId" class="feefo-review-widget-product" data-parent-product-sku="my_parent_product_ref"></div> 
+<div id="feefo-product-review-widgetId" class="feefo-review-widget-product" data-product-sku="my_product_ref"data-widget-title="My Product Title"></div> 
+<div class="feefo-review-badge-wrapper-product"></div> 
+{% endcomment %}
+
+ 
+
+{% schema %}
+
+{
+  "name": "Product - image scroll",
+  "max_blocks": 10,
+  "class": "product-template product-main has-sidebar-option jsProduct product-template--image-scroll",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Product gallery"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_zoom",
+      "label": "Magnify on hover",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_product_lightbox",
+      "label": "Enable lightbox",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Mobile Product Gallery"
+    },
+    {
+      "type": "checkbox",
+      "id": "display_thumbnails",
+      "label": "Show thumbnails",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "slideshow_speed",
+      "label": "Gallery speed",
+      "min": 0,
+      "max": 6,
+      "unit": "sec",
+      "default": 0,
+      "info": "Set to 0 to disable autoplay."
+    },
+    {
+      "type": "select",
+      "id": "slideshow_transition",
+      "label": "Gallery transition",
+      "options": [
+        {
+          "value": "slide",
+          "label": "Slide"
+        },
+        {
+          "value": "fade",
+          "label": "Fade"
+        }
+      ],
+      "default": "slide"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_thumbnail_slider",
+      "label": "Enable thumbnail slider",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Media",
+      "info": "Learn more about [media types](https://help.shopify.com/en/manual/products/product-media)"
+    },
+    {
+      "type": "radio",
+      "id": "product_images_position",
+      "label": "Media position",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "checkbox",
+      "id": "set_product_height",
+      "label": "Set height of product media",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "product_height",
+      "label": "Product media height",
+      "min": 200,
+      "max": 800,
+      "step": 10,
+      "default": 500,
+      "unit": "px"
+    },
+    {
+      "type": "checkbox",
+      "id": "video_looping",
+      "label": "Enable video looping",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "width",
+      "label": "Width",
+      "default": "standard",
+      "options": [
+        {
+          "value": "standard",
+          "label": "Standard"
+        },
+        {
+          "value": "wide",
+          "label": "Wide"
+        }
+      ]
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top spacing",
+      "min": 0,
+      "max": 80,
+      "default": 20,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom spacing",
+      "min": 0,
+      "max": 80,
+      "default": 0,
+      "unit": "px"
+    },
+    {
+      "type": "header",
+      "content": "Advanced",
+      "info": "[Learn more](https://help.outofthesandbox.com/hc/en-us/articles/360022329373)"
+    },
+    {
+      "type": "text",
+      "id": "css_class",
+      "label": "CSS Class"
+    },
+    {
+      "type": "textarea",
+      "id": "custom_css",
+      "label": "Custom CSS"
+    },
+    {
+    	"type": "header",
+    	"content": "PRODUCT CARE"
+    },
+    {
+    "type": "textarea",
+    "id": "mwc_text",
+    "label": "Machine Wash Cold",
+    "default": "Machine Wash Cold"
+    },
+    {
+      "type": "textarea",
+      "id": "mww_text",
+      "label": "Machine Wash Warm",
+      "default": "Machine Wash Warm"
+    },
+    {
+      "type": "textarea",
+      "id": "hw_text",
+      "label": "Hand Wash",
+      "default": "Hand Wash"
+    },
+    {
+      "type": "textarea",
+      "id": "hwnew_text",
+      "label": "Hand Wash New",
+      "default": "Hand Wash New"
+    },
+    {
+      "type": "textarea",
+      "id": "dnw_text",
+      "label": "Do Not Wash",
+      "default": "Do Not Wash"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "@app"
+    },
+    {
+      "type": "title",
+      "name": "Title",
+      "limit": 1
+    },
+    {
+      "type": "vendor",
+      "name": "Vendor",
+      "limit": 1
+    },
+    {
+      "type": "price",
+      "name": "Price",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "checkbox",
+          "id": "display_savings",
+          "label": "Show price savings",
+          "default": true
+        }
+      ]
+    },
+    {
+      "type": "sku",
+      "name": "SKU",
+      "limit": 1
+    },
+    {
+      "type": "text",
+      "name": "Text",
+      "settings": [
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Text",
+          "default": "<p>Text block</p>"
+        }
+      ]
+    },
+    {
+      "type": "description",
+      "name": "Description",
+      "limit": 1
+    },
+    {
+      "type": "form",
+      "name": "Form",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "header",
+          "content": "Dynamic Checkout Button"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_payment_button",
+          "label": "Show dynamic checkout button",
+          "info": "Each customer will see their preferred payment method from those available on your store, such as PayPal or Apple Pay. [Learn more](https:\/\/help.shopify.com\/manual\/using-themes\/change-the-layout\/dynamic-checkout)",
+          "default": true
+        },
+        {
+          "type": "paragraph",
+          "content": "Customize additional form features for the product in Theme settings > Product form."
+        }
+      ]
+    },
+    {
+      "type": "product-links",
+      "name": "Product links",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "checkbox",
+          "id": "show_collections",
+          "label": "Show collections",
+          "default": true
+        },
+        {
+          "type": "checkbox",
+          "id": "show_types",
+          "label": "Show types",
+          "default": true
+        },
+        {
+          "type": "checkbox",
+          "id": "show_tags",
+          "label": "Show tags",
+          "default": true
+        }
+      ]
+    },
+    {
+      "type": "share",
+      "name": "Share",
+      "limit": 1
+    },
+    {
+      "type": "size-chart",
+      "name": "Size chart",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "page",
+          "id": "size_chart",
+          "label": "Size chart",
+          "info": "[Learn more](https:\/\/help.outofthesandbox.com\/hc\/en-us\/articles\/115006910707-Using-the-Size-Chart-Sections-themes-)"
+        }
+      ]
+    },
+	{
+		"type": "product_list",
+		"name": "product list",
+		"settings":[
+    	 {
+			"type": "text",
+			"id": "heading",
+			"label": "heading"
+	 	 },
+		 {
+			"type": "url",
+			"id": "url",
+			"label": "url"
+		 },
+		 {
+			"type": "richtext",
+			"id": "description",
+			"label": "description",
+    		"default": "<p>When selecting your size, please note our pajamas have a relaxed and casual fit, allowing for a more comfortable experience.</p>"	
+		 },
+    	 {
+    		"type": "header",
+    		"content": "section 1"
+    	 },
+		 {
+			"type": "text",
+			"id": "heading_1",
+			"label": "heading 1"
+	 	 },
+		 {
+			"type": "richtext",
+			"id": "description_1",
+			"label": "description 1"
+		 },
+		 {
+			"type": "page",
+			"id": "page_1",
+			"label": "page 1"
+		 },
+    	 {
+    		"type": "header",
+    		"content": "section 4"
+    	 },
+    	 {
+    		"type": "checkbox",	
+    		"id": "size_chart_4",
+    		"label": "size_chart"
+    	 },
+		 {
+			"type": "text",
+			"id": "heading_4",
+			"label": "heading 4"
+	 	 },
+		 {
+			"type": "richtext",
+			"id": "description_4",
+			"label": "description 4"
+		 },
+		 {
+			"type": "page",
+			"id": "page_4",
+			"label": "page 4"
+		 }
+		]
+	}
+  ],
+  "default": {
+    "settings": {
+
+    }
+  }
+}
+
+{% endschema %}

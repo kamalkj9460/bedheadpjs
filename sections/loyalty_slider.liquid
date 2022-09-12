@@ -1,0 +1,68 @@
+<div class="loyalty_section"> 
+  <div class="lyty_slider">
+     {%  for block in section.blocks %}
+       <div class="lyty_item">
+         <div class="lyty_item_inner">
+         {%  if block.settings.url != blank %}
+           <a href="{{ block.settings.url }}" class="lyty_url"> </a>
+         {%  endif %}
+         {%  if block.settings.image != blank %}
+         <div class="lyty_img">
+           <img {%  if block.settings.image_mobile %}class="hide_mobile" {%  endif %}
+                src="{{ block.settings.image | img_url: 'master' }}" alt="{{ block.settings.image.alt }}"/>
+           {%  if block.settings.image_mobile %}
+             <img class="show_mobile" src="{{ block.settings.image_mobile | img_url: 'master' }}" alt="{{ block.settings.image_mobile.alt }}"/>
+           {%  endif %}
+         </div>
+         {%  endif %}
+          <div class="lyty_txt">
+             <div class="lyty_txt_style">{{ block.settings.text }}</div>
+          </div>
+         </div>
+       </div>
+      {%  endfor %}
+  </div> 
+</div>
+
+
+{% schema %}
+  {
+    "name": "loyalty ",
+    "settings": [ 
+    ],
+    "blocks":[
+      {
+         "type": "slider",
+         "name": "slider",
+         "settings":[
+          {
+            "type": "image_picker",
+            "id": "image",
+            "label": "image"
+          },
+          {
+            "type": "image_picker",
+            "id": "image_mobile",
+            "label": "image mobile"
+          },
+          {
+            "type": "text",
+            "id": "text",
+            "label": "text"
+          },
+          {
+            "type": "url",
+            "id": "url",
+            "label": "url"
+          }  
+         ]
+      }
+    ],
+    "presets":[
+      {
+        "name": "loyalty slider"
+      }
+    ]
+  }
+{% endschema %}
+ 

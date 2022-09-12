@@ -1,0 +1,106 @@
+<div class="loypt_section">
+  <div class="section">
+    
+    <div class="loypt_header">
+      {%  if section.settings.heading != blank %}
+      <h3>{{ section.settings.heading }}</h3>
+      {%  endif %}
+      <div class="loypt_hd_txt">
+        {{ section.settings.detail }}
+      </div> 
+      <div class="loypt_btn_flx">
+        {%  if section.settings.btn_txt_1 != blank %}
+          <div class="loypt_btn_item"><a class="loypt_btn" href="{{ section.settings.btn_url_1 }}">{{ section.settings.btn_txt_1 }}</a></div>
+        {%  endif %}
+
+        {%  if section.settings.btn_txt_2 != blank %}
+          <div class="loypt_btn_item"><a class="loypt_btn" href="{{ section.settings.btn_url_2 }}">{{ section.settings.btn_txt_2 }}</a></div>
+        {%  endif %}
+      </div>
+      
+    </div>
+
+    <div class="loypt_flx">
+      {%  for block in section.blocks %}
+      <div class="loypt_point">
+         <div class="loypt_point_inner">
+           <div class="loypt_number">{{ forloop.index }}</div>
+           <div class="loypt_pts_heading">{{ block.settings.heading }}</div>
+           <div class="loypt_pts_txt">{{ block.settings.text }}</div>
+           {%  if block.settings.url != blank %}
+            <a href="{{ block.settings.url }}"></a>
+           {%  endif %}
+         </div>
+      </div>
+      {%  endfor %}      
+    </div>
+    
+  </div>
+</div>
+
+{% schema %}
+  {
+    "name": "loyalty points",
+    "settings": [
+      {
+        "type": "text",
+        "id": "heading",
+        "label": "heading"
+      },
+      {
+        "type": "richtext",
+        "id": "detail",
+        "label": "detail"
+      },
+      {
+        "type": "text",
+        "id": "btn_txt_1",
+        "label": "button text 1"
+      },
+      {
+        "type": "text",
+        "id": "btn_txt_2",
+        "label": "button text 2"
+      },
+      {
+        "type": "url",
+        "id": "btn_url_1",
+        "label": "button url 1"
+      },
+      {
+        "type": "url",
+        "id": "btn_url_2",
+        "label": "button url 2"
+      }
+    ],
+    "blocks":[
+      {
+        "type": "points",
+        "name": "points",
+        "settings":[
+          {
+            "type": "text",
+            "id": "heading",
+            "label": "heading"
+          },
+          {
+            "type": "richtext",
+            "id": "text",
+            "label": "text"
+          },
+          {
+            "type": "url",
+            "id": "url",
+            "label": "url"
+          }
+        ]
+      }
+    ],
+    "presets":[
+      {
+        "name": "loyalty points"
+      }
+    ]
+  }
+{% endschema %}
+ 

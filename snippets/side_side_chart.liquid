@@ -1,0 +1,394 @@
+<div class="side_chart_bg"></div> 
+<div class="side_chart">
+ 
+  <div class="side_chart_inner">
+    <button class="close_side" tabindex="0">X</button>
+     <div class="section_chart size-chart">
+       <h3>{{ title }}</h3>
+       
+       {% assign guideTitle = page.title %}
+        {% if guideTitle contains "Women's" %}
+          <p>When selecting your size, please note our pajamas have a relaxed and casual fit, allowing for a more comfortable experience.</h3>
+          {% elsif guideTitle contains "Kid's" %}
+          <p> We suggest ordering one size up as our children and infant pajamas are designed with a snug fit.</p>
+        {% else %}
+          <p>Our pajamas are designed to comfortably fit the below measurements.</p>
+        {% endif %}
+
+        <div class="unit-controls nav_sizeChart">
+          <button type="button" data-unit="metric" class="unit-control metric ">CM</button>
+          <button type="button" data-unit="imperial" class="unit-control imperial selected">IN</button>
+        </div>
+       
+       {{ content }}
+       
+       {% comment %}
+     
+        <ul class="nav_sizeChart">
+          <li data-id="cm" class="active"><span>CM</span></li>
+          <li data-id="in"><span>IN</span></li>
+        </ul>
+       
+    
+      <table class="data_table_size active" data-id="cm"  width="100%">
+          <tbody>
+              <tr>
+                  <td>Size</td>
+                  <td>US Size</td>
+                  <td>Bust</td>
+                  <td>Waist</td>
+                  <td>Hips</td>
+              </tr>
+              <tr>
+                  <td>XS</td>
+                  <td><span>2</span></td>
+                  <td>83 5/6</td>
+                  <td>63 1/2</td>
+                  <td>90 1/6</td>
+              </tr>
+              <tr>
+                  <td>S</td>
+                  <td>4-6</td>
+                  <td>87 5/8</td>
+                  <td>67 1/3</td>
+                  <td>94&nbsp;</td>
+              </tr>
+              <tr>
+                  <td>M</td>
+                  <td>8-10</td>
+                  <td>95&nbsp;1/4</td>
+                  <td>75</td>
+                  <td>101&nbsp;3/5</td>
+              </tr>
+              <tr>
+                  <td>L</td>
+                  <td>12-14</td>
+                  <td>102&nbsp;7/8</td>
+                  <td>82 5/9</td>
+                  <td>109 2/9</td>
+              </tr>
+              <tr>
+                  <td>XL</td>
+                  <td>16-18</td>
+                  <td>110 1/2</td>
+                  <td>90 1/6</td>
+                  <td>116 5/6</td>
+              </tr>
+              <tr>
+                  <td>1X</td>
+                  <td>16-18W</td>
+                  <td>113</td>
+                  <td>92 5/7</td>
+                  <td>119 3/8</td>
+              </tr>
+              <tr>
+                  <td>2X</td>
+                  <td>20-22W</td>
+                  <td>120 2/3</td>
+                  <td>100 1/3</td>
+                  <td>127</td>
+              </tr>
+              <tr>
+                  <td>3X</td>
+                  <td>24-26W</td>
+                  <td>128 1/4</td>
+                  <td>108</td>
+                  <td>134 5/8</td>
+              </tr>
+          </tbody>
+      </table>
+    
+		<table class="data_table_size" data-id="in" width="100%">
+        <tbody>
+        <tr>
+          <td>Size</td>
+          <td>US Size</td>
+          <td>Bust</td>
+          <td>Waist</td>
+          <td>Hips</td>
+        </tr>
+        <tr>
+          <td>XS</td>
+          <td><span>2</span></td>
+          <td>33</td>
+          <td>25</td>
+          <td>35 1/2</td>
+        </tr>
+        <tr>
+          <td>S</td>
+          <td>4-6</td>
+          <td>34 1/2</td>
+          <td>26 1/2</td>
+          <td>37</td>
+        </tr>
+        <tr>
+          <td>M</td>
+          <td>8-10</td>
+          <td>37 1/2</td>
+          <td>29 1/2</td>
+          <td>40</td>
+        </tr>
+        <tr>
+          <td>L</td>
+          <td>12-14</td>
+          <td>40 1/2</td>
+          <td>32 1/2</td>
+          <td>43</td>
+        </tr>
+        <tr>
+          <td>XL</td>
+          <td>16-18</td>
+          <td>43 1/2</td>
+          <td>35 1/2</td>
+          <td>46</td>
+        </tr>
+        <tr>
+          <td>1X</td>
+          <td>16-18W</td>
+          <td>44 1/2</td>
+          <td>36 1/2</td>
+          <td>47</td>
+        </tr>
+        <tr>
+          <td>2X</td>
+          <td>20-22W</td>
+          <td>47 1/2</td>
+          <td>39 1/2</td>
+          <td>50</td>
+        </tr>
+        <tr>
+          <td>3X</td>
+          <td>24-26W</td>
+          <td>50 1/2</td>
+          <td>42 1/2</td>
+          <td>53</td>
+        </tr>
+        </tbody>
+      </table>
+      {% endcomment %}
+  </div> 
+    
+  </div>
+</div>
+
+ 
+<script type="application/json" id="sizechartonPage">
+  {{ content | json }}
+ </script>
+
+ {% comment %}
+<script>  
+  $('.unit-controls .unit-control').click(function(){
+    let ussizeconvert = true;
+    if($('.size-chart > .content h1').text().includes("Women's")){
+      ussizeconvert = false;
+    }
+    if(!$(this).hasClass('selected')){
+      var unit = $(this).attr('data-unit');
+      
+      //Handles Button State 
+      if(unit =='metric'){
+        $('.unit-controls .imperial').removeClass('selected');
+        $('.unit-controls .imperial').addClass('was-clicked');
+      }else{
+        if(ussizeconvert){
+          if($(this).hasClass('was-clicked')){
+          location.reload();
+          };
+          $('.unit-controls .metric').removeClass('selected');
+        }else{
+          $('.unit-controls .metric').removeClass('selected');
+        }        
+      }
+      $(this).addClass('selected');
+
+      //Conversion Functions
+      function cmToIn(cm){
+        return Math.round(cm*0.39370);
+      }
+      function inToCm(inches){
+        return Math.round(inches/0.39370);
+      }
+      
+      function lbToKg(lb){
+        //return Math.round(10*(lb/2.2046))/10;
+        return lb;
+      }
+
+      function kgToLb(kg){
+        //return Math.round(10*kg*2.2046)/10;
+        return kg;
+      }
+
+      var weightAttrArray = ['weight'];
+      var blacklistAttrArray = ['size','dog size','examples of breed'];
+      var lengthColumnPositions = [];
+      var weightColumnsPositions = [];
+
+      //Gets the column position of the column we need to convert the length and appends to the array
+      $('.size-chart tr:first-child td').each(function(index){
+        var currentAttribute = $(this).text().toLowerCase();
+        if(weightAttrArray.indexOf(currentAttribute) == -1 && blacklistAttrArray.indexOf(currentAttribute) == -1){
+          lengthColumnPositions.push(index+1);
+        }
+        if(weightAttrArray.indexOf(currentAttribute) > -1){
+          weightColumnsPositions.push(index+1);
+        }
+      });
+      
+      //Goes through each column and converts each value except for the headings
+      lengthColumnPositions.forEach(function(position){
+        if(ussizeconvert){
+            $('.size-chart tr:not(:first-child) td:nth-child('+position+')').each(function(){
+            var currentUnitValue = $(this).text().toLowerCase();
+            if(currentUnitValue.indexOf('-') > -1){
+              currentUnitValue = currentUnitValue.split('-');
+              currentUnitValue = currentUnitValue.map(function(value){
+                return parseInt(value);
+              });
+              if(unit =='metric'){
+                $(this).text(inToCm(currentUnitValue[0])+'-'+inToCm(currentUnitValue[1]));
+              }else{
+                $(this).text(cmToIn(currentUnitValue[0])+'-'+cmToIn(currentUnitValue[1]));
+              }          
+            }else{
+              currentUnitValue = parseInt(currentUnitValue);
+              if(unit =='metric'){
+                $(this).text(inToCm(currentUnitValue));
+              }else{
+                $(this).text(cmToIn(currentUnitValue));
+              }
+            }
+          });
+        }else{
+            if(unit=="metric"){
+              womenchartset(cmTable);              
+            }else{
+              var size = $.parseJSON($('#sizechartonPage').html());
+              womenchartset(size);
+            }
+          //return false;          
+        }        
+      });
+      //If there is a second table we know it is the womens chart so we will manually target the general inseam column
+      var tables = $('table');
+      if(tables.length > 1){
+        $('.size-chart table:last-child tr:not(:first-child) td:nth-child(2)').each(function(){
+          var currentUnitValue = $(this).text();
+          currentUnitValue = currentUnitValue.split('-');
+          currentUnitValue = currentUnitValue.map(function(value){
+            return parseInt(value);
+          });
+          if(unit =='metric'){
+            $(this).text(inToCm(currentUnitValue[0])+'-'+inToCm(currentUnitValue[1]));
+          }else{
+            $(this).text(cmToIn(currentUnitValue[0])+'-'+cmToIn(currentUnitValue[1]));
+          }          
+        });
+      }
+
+      weightColumnsPositions.forEach(function(position){
+        $('.size-chart tr:not(:first-child) td:nth-child('+position+')').each(function(){
+          var currentUnitValue = $(this).text();
+          if(currentUnitValue.indexOf('-') > -1){
+            currentUnitValue = currentUnitValue.split('-');
+            currentUnitValue = currentUnitValue.map(function(value){
+              return parseInt(value);
+            });
+            if(unit =='metric'){
+              $(this).text(lbToKg(currentUnitValue[0])+'-'+lbToKg(currentUnitValue[1])+" lbs");
+            }else{
+              $(this).text(kgToLb(currentUnitValue[0])+'-'+kgToLb(currentUnitValue[1])+" lbs");
+            }          
+          }else{
+            if(isNumber(currentUnitValue)){
+              	currentUnitValue = parseInt(currentUnitValue);
+                  if(unit =='metric'){
+                  $(this).text(lbToKg(currentUnitValue));
+                  }else{
+                    $(this).text(kgToLb(currentUnitValue));
+                  }
+            }
+                        
+          }
+        });
+      });
+    }
+  });
+  
+ function isNumber(n) { 
+    return /^-?[\d.]+(?:e-?\d+)?$/.test(n); 
+  } 
+
+  function womenchartset(tb){
+    $('.content > table ').replaceWith(tb); 
+  }
+  const cmTable='<table width="100%">'+
+'<tbody>'+
+'<tr>'+
+'<td>Size</td>'+
+'<td>US Size</td>'+
+'<td>Bust</td>'+
+'<td>Waist</td>'+
+'<td>Hips</td>'+
+'</tr>'+
+'<tr>'+
+'<td>XS</td>'+
+'<td><span>2</span></td>'+
+'<td>83 5/6</td>'+
+'<td>63 1/2</td>'+
+'<td>90 1/6</td>'+
+'</tr>'+
+'<tr>'+
+'<td>S</td>'+
+'<td>4-6</td>'+
+'<td>87 5/8</td>'+
+'<td>67 1/3</td>'+
+'<td>94 </td>'+
+'</tr>'+
+'<tr>'+
+'<td>M</td>'+
+'<td>8-10</td>'+
+'<td>95 1/4</td>'+
+'<td>75</td>'+
+'<td>101 3/5</td>'+
+'</tr>'+
+'<tr>'+
+'<td>L</td>'+
+'<td>12-14</td>'+
+'<td>102 7/8</td>'+
+'<td>82 5/9</td>'+
+'<td>109 2/9</td>'+
+'</tr>'+
+'<tr>'+
+'<td>XL</td>'+
+'<td>16-18</td>'+
+'<td>110 1/2</td>'+
+'<td>90 1/6</td>'+
+'<td>116 5/6</td>'+
+'</tr>'+
+'<tr>'+
+'<td>1X</td>'+
+'<td>16-18W</td>'+
+'<td>113</td>'+
+'<td>92 5/7</td>'+
+'<td>119 3/8</td>'+
+'</tr>'+
+'<tr>'+
+'<td>2X</td>'+
+'<td>20-22W</td>'+
+'<td>120 2/3</td>'+
+'<td>100 1/3</td>'+
+'<td>127</td>'+
+'</tr>'+
+'<tr>'+
+'<td>3X</td>'+
+'<td>24-26W</td>'+
+'<td>128 1/4</td>'+
+'<td>108</td>'+
+'<td>134 5/8</td>'+
+'</tr>'+
+'</tbody>'+
+'</table>';
+</script>
+ {% endcomment %}

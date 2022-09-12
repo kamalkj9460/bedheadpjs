@@ -1,0 +1,63 @@
+<div id="theme-ajax-cart" class="theme-ajax-cart shopify-section {% if context == 'mobile-header' %}jsAjaxCart{% endif %} is-{{ settings.cart_action | replace: '_', '-' }} theme-ajax-cart--header-{{ settings.header_layout }}" data-ajax-cart-{{ settings.cart_action }}>
+   <div id="fsb_placeholder"></div>
+  <section class="ajax-cart ajax-cart--{{ settings.cart_action | replace: '_', '-' }}">
+    {% comment %} Inner ajax cart content can be found in templates/cart.ajax.liquid {% endcomment %}
+
+    {% if settings.cart_action == 'mini_cart' %}
+      <div class="card has-shadow">
+        <div class="ajax-cart__close-icon" data-ajax-cart-close>
+          {% render 'icon', name: 'x' %}
+        </div>
+        <div id="ajax-cart__content" data-ajax-cart-content></div>
+      </div>
+    {% elsif settings.cart_action == 'drawer' %}
+      <div class="ajax-cart__close-icon" data-ajax-cart-close>
+        {% render 'icon', name: 'x' %}
+      </div>
+      <div id="ajax-cart__content" data-ajax-cart-content></div>
+    {% endif %}
+    
+  
+    
+  </section>
+
+  {% comment %}JavaScript{% endcomment %}
+  <script
+    type="application/json"
+    data-section-id="theme-ajax-cart"
+    data-section-data
+  >
+    {
+      "cart_action": {{ settings.cart_action | json }},
+      "display_tos_checkbox": {{ settings.display_tos_checkbox | json }}
+    }
+  </script>
+  
+ 
+  <script>
+    var crocsSell ='<div class="ajct_crossSell">'+
+       '<div class="sideCart__featured emptyHide" >'+
+        '<div class="h4">{{ settings.cart_heading_text | escape }}</div>'+
+        {% assign collection = collections[settings.featured_product_collection_cart] %}
+        '<div class="SideCart__featured__products">'+
+          {% for product in collection.products limit: 3 %}
+           ' <div class="SideCart__item">'+
+             ' <a href="{{ product.url | within: collection }}">'+
+                '<img src="{{product.featured_image.src | img_url: '450x' }}" alt="{{product.featured_image.src.alt }}"/>'+
+               
+               ' <div class="ajct_price">{{ product.price | money }}</div>'+
+             ' </a>'+
+          	'</div>'+
+          {% endfor %}
+       ' </div>'+
+     ' </div>'+
+    ' </div>';
+    
+   
+  </script>
+   <script src="{{ 'z__jsAjaxCart.js' | asset_url }}"></script>
+</div>
+
+{% if settings.cart_action == 'drawer' %}
+  <div class="ajax-cart__overlay" data-ajax-cart-close></div>
+{% endif %}

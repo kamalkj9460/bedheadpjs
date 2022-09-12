@@ -1,0 +1,37 @@
+<div class="container l">
+<div class="page-sizechart">
+ 
+  
+  
+  <div class="section_chart size-chart">
+    <h3>{{ page.title }}</h3>
+
+    {% assign guideTitle = page.title %}
+    {% if guideTitle contains "Women's" %}
+    <p>When selecting your size, please note our pajamas have a relaxed and casual fit, allowing for a more comfortable experience.</h3>
+  {% elsif guideTitle contains "Kid's" %}
+  <p> We suggest ordering one size up as our children and infant pajamas are designed with a snug fit.</p>
+  {% else %}
+  <p>Our pajamas are designed to comfortably fit the below measurements.</p>
+  {% endif %}
+	<br/> <br/>
+  <div class="unit-controls nav_sizeChart">
+    <button type="button" data-unit="metric" class="unit-control metric ">CM</button>
+    <button type="button" data-unit="imperial" class="unit-control imperial selected">IN</button>
+  </div>
+
+  {{ page.content }}
+  </div>
+  
+  
+  
+</div>
+</div>
+
+
+ 
+{% assign pagecontent = page.content %} 
+<script type="application/json" id="sizechartonPage">
+  {{ pagecontent | json }}
+ </script>
+ 

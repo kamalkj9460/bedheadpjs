@@ -1,0 +1,39 @@
+<!-- BEGIN AFTERPAY_PRESENT -->
+<script type="lazyload2" data-src="https://static-us.afterpay.com/javascript/present-afterpay.js"></script>
+<script type="lazyload2">
+ let amount = 0, priceSelector = "", locale = 'en_US';
+ let afterpayLogoColor = "color"; // ['black', 'white', or 'color']
+ let showUpperLimit = false;
+ let currentObserver = { activated: true, isDecimalPrice: true };
+ let minMaxThreshold = { min: 100, max: 100000 };
+ {%case template.name%} 
+    {%when "product"%}
+        amount = {{product.price | json}};    
+        priceSelector= ".price-container"
+        currentObserver = null;
+    {%when "cart"%}     
+        amount = {{cart.total_price | json}};
+        priceSelector = ".subtotal-column"
+        currentObserver.observerTarget = "#CartPage";
+        currentObserver.targetPriceSelector = ".subtotal-column";
+    {%when "product" or "cart"%}
+       const apConfig = {
+          afterpayLogoColor, priceSelector,
+          locale, amount, showUpperLimit, minMaxThreshold,
+          mutationObserver: currentObserver
+        };
+       setTimeout(function(){
+         new presentAfterpay(apConfig).init();
+       })
+  {%endcase%}
+</script>
+<style>
+  .c-afterpay-info-modal-annotation__p{ margin-top: 3px; }
+  .afterpay-link{font-size: 12px; }
+  .afterpay-paragraph{ font-size: 14px; padding-top: 10px;}
+  .afterpay-logo{ width: 86px !important; height: auto !important; display: inline-block !important;}
+  .subtotal-row > .afterpay-paragraph {text-align: left; padding: 0 10px;}
+  .afterpay_modal_wrapper > div.grid-container {margin-right: 0px !important;}
+  #afterpay-modal-close{min-width: 0px !important; width: auto !important}
+</style>
+<!-- END AFTERPAY PRESENT -->

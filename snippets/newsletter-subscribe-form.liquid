@@ -1,0 +1,62 @@
+<script type="lazyload2" data-src="https://static.klaviyo.com/onsite/js/klaviyo.js?company_id=RHzs3d"></script>
+
+
+
+<!-- /snippets/section-subscribe-form.liquid -->
+
+{% assign success = 'general.newsletter_form.success_text' | t %}
+{% assign email_placeholder = 'general.newsletter_form.email' | t %}
+{% assign button_text = 'general.newsletter_form.submit' | t %}
+<!-- Begin MailChimp Signup Form -->
+<div class="klaviyo_form">
+  <div class="success">
+    <span class="h1 nws_heading">SIGN UP AND SAVE 15% OFF</span>
+    <p class="subheading">Sign up to get updates and offers on our products. First time customers get 15% off.</p>
+  </div>
+
+  <div class="klaviyo-form-X47VXp"></div>
+</div>
+
+{% comment %} 
+
+<div class="failure">This email is already subscribed.</div>
+<div id="newsletter-mc_embed_signup">
+  <form action="https://bedheadpjs.us17.list-manage.com/subscribe/post?u=f4c50aa7f29f6199b97e3a3ef&amp;id=42abd58081" id="newsletter-mc-embedded-subscribe-form" class="validate contact-form">
+    <!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups-->
+    <label class="hidden" for="newsletter-mce-EMAIL">Email Address  <span class="asterisk">*</span>
+    </label>
+    <input placeholder="Email" type="email" value="" name="EMAIL" class="js-valid-input required email" id="newsletter-mce-EMAIL">
+    <div style="position: absolute; left: -5000px;" aria-hidden="true"><input type="text" name="b_f4c50aa7f29f6199b97e3a3ef_42abd58081" tabindex="-1" value="" id="b_f4c50aa7f29f6199b97e3a3ef"><label for="b_f4c50aa7f29f6199b97e3a3ef" style="display: none;">Hiden Lable</label></div>
+    <label for="newsletter-mc-embedded-subscribe" style="display: none;">Send</label>
+    <input type="submit" value="Subscribe" name="subscribe" id="newsletter-mc-embedded-subscribe" class="btn js-valid-button" disabled>
+  </form>
+</div>
+
+<script type="lazyload2">
+  /*!  v1.2.2 | Fabio Quarantini - http://www.fabioquarantini.com */
+  !function(a,b,c,d){a.fn.formchimp=function(b){var d,e=a(this),f=a("body"),g=e.attr("action").replace("/post?","/post-json?").concat("&c=?"),h=e.find('[type="submit"]'),i={appendElement:e,buttonSelector:h,buttonText:"",debug:!1,errorMessage:"",onMailChimpSuccess:function(){},onMailChimpError:function(){},responseClass:"mc-response",successMessage:"",url:g},j=i.buttonSelector.text();a.extend(i,b),a(e).on("submit",function(b){b.preventDefault(),f.removeClass("mc-success mc-error").addClass("mc-loading"),0===a("."+i.responseClass).length?d=a("<div/>").addClass(i.responseClass).appendTo(i.appendElement):d.html(""),a.ajax({url:i.url,data:a(this).serialize(),dataType:"jsonp"}).done(function(b){i.debug&&console.log(JSON.stringify(b));var e=b.msg;isNaN(e.charAt(0))||"-"!==e.charAt(2)||(e=e.substring(3)),f.addClass("mc-"+b.result).removeClass("mc-loading"),"success"===b.result?(""!==i.successMessage&&(e=i.successMessage),""!==i.buttonText&&i.buttonSelector.text(i.buttonText),a(c).trigger("mailChimpSuccess"),i.onMailChimpSuccess.call()):(""!==i.errorMessage&&(e=i.errorMessage),""!==i.buttonText&&i.buttonSelector.text(j),a(c).trigger("mailChimpError"),i.onMailChimpError.call()),d.html(e)})})}}(jQuery,window,document);
+
+  $(document).on('input', '.js-valid-input', function () {
+    var $item = $(this),
+            value = $item.val();
+    if (value < 1) {
+      $('.js-valid-button').attr('disabled', true)
+    }
+    else {
+      $('.js-valid-button').attr('disabled', false)
+    }
+  });
+
+  $("#newsletter-mc-embedded-subscribe-form").formchimp({
+    onMailChimpSuccess:function(){
+      $('.homepage-newsletter .success').show();
+      $('.homepage-newsletter .default-content, #newsletter-mc_embed_signup, .homepage-newsletter .failure').hide();
+      Cookies.set('newsletter-subscribed', true);
+    },
+    onMailChimpError:function(){
+      $('.homepage-newsletter .failure').show();
+    }
+  });
+
+</script>
+{% endcomment %}

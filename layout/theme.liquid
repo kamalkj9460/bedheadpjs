@@ -1,0 +1,453 @@
+{% capture content %}
+<!doctype html>
+<html class="no-js no-touch" lang="{{ shop.locale }}"> 
+   <head>
+      	{% if template contains 'index' %}
+            {% render 'homepage-critical-css' %}
+        {% elsif template contains 'collection' %}
+            {% render 'collection-critical-css' %}
+        {% elsif template contains 'product' %}
+            {% render 'product-critical-css' %}
+        {% else %}
+			{% render 'theme-css' %}
+      		{% render 'theme-css-2' %}
+        {% endif %}
+  		<!-- Google Optimize -->
+  		<script type="lazyload2" data-src="https://www.googleoptimize.com/optimize.js?id=OPT-WSCLSM3"></script>
+  		<!-- End Google Optimize -->      
+        {% include 'dataLayer-allPages' %}
+  		<script type="lazyload2" data-src="https://s3.amazonaws.com/lastsecondcoupon/js/freeshippingbar.js?shop=bedheadpjs.myshopify.com"></script>
+  		<!-- Bing Ads Tracker --> 
+  		<script type="lazyload2">(function(w,d,t,r,u){var f,n,i;w[u]=w[u]||[],f=function(){var o={ti:"17061906"};o.q=w[u],w[u]=new UET(o),w[u].push("pageLoad")},n=d.createElement(t),n.src=r,n.async=1,n.onload=n.onreadystatechange=function(){var s=this.readyState;s&&s!=="loaded"&&s!=="complete"||(f(),n.onload=n.onreadystatechange=null)},i=d.getElementsByTagName(t)[0],i.parentNode.insertBefore(n,i)})(window,document,"script","//bat.bing.com/bat.js","uetq");</script>
+  		<!-- End Bing Ads Tracker -->
+        <meta charset="utf-8">
+        <meta http-equiv="cleartype" content="on">
+        <meta name="robots" content="index,follow">
+        <meta name="viewport" content="width=device-width,initial-scale=1">
+        <meta name="theme-color" content="{{ settings.shop_bg_color }}">
+        <link rel="canonical" href="{{ canonical_url }}">
+  		{%- if current_tags -%}{%- assign meta_tags = current_tags | join: ', ' -%}{%- endif -%}
+  		<title>{%- if template.name == "index" -%}{{ page_title }}{%- else -%}{{ page_title }}{% if current_tags %} {{ 'general.meta.tagged_html' | t: tags: meta_tags }}{%- endif -%}{% if current_page != 1 %} {{ 'general.meta.page' | t: page_number: current_page }}{% endif %}{% unless page_title contains shop.name %} - {{ shop.name }}{% endunless %}{% endif %}</title>
+        <!-- DNS prefetches -->
+        <link rel="dns-prefetch" href="https://cdn.shopify.com">
+        <link rel="dns-prefetch" href="https://fonts.shopify.com">
+        <link rel="dns-prefetch" href="https://monorail-edge.shopifysvc.com">
+        <link rel="dns-prefetch" href="https://ajax.googleapis.com">
+  		{% if settings.enable_shopify_review_comments %}
+    		<link rel="dns-prefetch" href="https://productreviews.shopifycdn.com">
+  		{% endif %}
+  		<!-- Preconnects -->
+        <link rel="preconnect" href="https://cdn.shopify.com" crossorigin>
+        <link rel="preconnect" href="https://fonts.shopify.com" crossorigin>
+        <link rel="preconnect" href="https://monorail-edge.shopifysvc.com">
+        <link rel="preconnect" href="https://ajax.googleapis.com">
+  		{% if settings.enable_shopify_review_comments %}
+    		<link rel="preconnect" href="https://productreviews.shopifycdn.com">
+  		{% endif %}
+        <!-- Preloads -->
+        <!-- Preload CSS -->
+      	{% comment %}
+        <link rel="preload" href="{{ 'fancybox.css' | asset_url }}" as="style">
+        <link rel="preload" href="{{ 'styles.css' | asset_url }}" as="style">
+        <link rel="preload" href="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js" as="script">
+        <link rel="preload" href="{{ 'vendors.js' | asset_url }}" as="script">
+        <link rel="preload" href="{{ 'utilities.js' | asset_url }}" as="script">
+        <link rel="preload" href="{{ 'vendors.min.js' | asset_url }}" as="script">
+        <link rel="preload" href="{{ 'utilities.min.js' | asset_url }}" as="script"> 
+  		<link rel="preload" href="{{ 'app.js' | asset_url }}" as="script">
+        {% if settings.show_multiple_currencies or shop.enabled_currencies.size > 1 %}
+          	<link rel="preload" href="/services/javascripts/currencies.js" as="script">
+          	<link rel="preload" href="{{ 'currencyConversion.js' | asset_url }}" as="script">
+        {% endif %}
+  		{% if settings.enable_shipping_calculator and template.name == 'cart' %}
+    		<link rel="preload" href="{{ 'shopify_common.js' | shopify_asset_url }}" as="script">
+    		<link rel="preload" href="{{ 'api.jquery.js' | shopify_asset_url }}" as="script">
+    		<link rel="preload" href="{{ 'countries.js' | shopify_asset_url }}" as="script">
+  		{% endif %}
+  		{%- if template.directory == 'customers' -%}
+  			<link rel="preload" href="{{ 'shopify_common.js' | shopify_asset_url }}" as="script">
+  			<link rel="preload" href="{{ 'customer_area.js' | shopify_asset_url }}" as="script">
+  		{%- endif -%}
+  		{% if settings.disqus_enabled %}
+    		{% if template.name == "blog" or template.name == "article" or template.name == "index" %}
+      			<link rel="preload" href="//{{ settings.disqus_shortname }}.disqus.com/count.js" as="script">
+    		{% endif %}
+  		{% endif %}
+      	{% endcomment %}
+  		<!-- Facebook domain verification	 -->
+  		<meta name="facebook-domain-verification" content="hqkh2spujx8cy9sfh6677ki5gs70sn" />
+
+
+  
+  		{% unless template contains 'index' %}
+ 	 		<link rel="stylesheet" data-href="https://use.typekit.net/eon8gos.css">
+  		{% endunless %}
+        <!-- CSS for Flex -->
+        <link rel="stylesheet" data-href="{{ 'fancybox.css' | asset_url }}">
+        <link rel="stylesheet" data-href="{{ 'styles.css' | asset_url }}">
+        <link rel="stylesheet" data-href="{{ 'custom.scss.css' | asset_url }}">
+        {% comment %}Inject theme-object begin{% endcomment %}
+        <script>
+          window.PXUTheme = window.PXUTheme || {};
+          window.PXUTheme.version = '3.0.1';
+          window.PXUTheme.name = 'Flex';
+        </script>
+        {% comment %}Inject theme-object end{% endcomment %}  
+        <script>
+          	{% render 'js-variables' %}
+        </script>
+  		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+   		<script type="lazyload2" data-src="{{ 'vendors.min.js' | asset_url }}"></script>
+        <script type="lazyload2" data-src="{{ 'utilities.min.js' | asset_url }}"></script>
+        <script type="lazyload2" data-src="{{ 'app.js' | asset_url }}"></script>
+        {%- if settings.show_multiple_currencies or shop.enabled_currencies.size > 1 -%}
+        	<script type="text/javascript" src="/services/javascripts/currencies.js"></script>
+        	<script src="{{ 'currencyConversion.js' | asset_url }}" defer></script>
+        {%- endif -%}
+  		{%- if settings.enable_shipping_calculator and template.name == "cart" -%}
+    		<script src="{{ 'shopify_common.js' | shopify_asset_url }}" defer></script>
+    		<script src="{{ 'api.jquery.js' | shopify_asset_url }}" defer></script>
+    		<script src="{{ 'countries.js' | shopify_asset_url }}" defer></script>
+  		{%- endif -%}
+  		{%- if template.directory == 'customers' -%}
+    		<script src="{{ 'shopify_common.js' | shopify_asset_url }}" defer></script>
+    		<script src="{{ 'customer_area.js' | shopify_asset_url }}" defer></script>
+  		{%- endif -%}
+        {% if settings.disqus_enabled %}
+          	{% if template.name == "blog" or template.name == "article" or template.name == "index" %}
+            	<script id="dsq-count-scr" data-src="//{{ settings.disqus_shortname }}.disqus.com/count.js" type="lazyload2"></script>
+          	{% endif %}
+        {% endif %}
+   		{% unless template contains 'index' or template contains 'women'  %}
+  			<script type="lazyload2" data-src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  		{% endunless %}
+  		<script type="lazyload2" data-src="{{ 'custom.js' | asset_url }}"></script>
+        <noscript>
+          <style>
+            /* Insert styles for styles when JS is not loaded */
+
+            .noscript {
+              display: block;
+            }
+
+          </style>
+        </noscript>
+        <script>
+          document.documentElement.className=document.documentElement.className.replace(/\bno-js\b/,'js');
+          if(window.Shopify&&window.Shopify.designMode)document.documentElement.className+=' in-theme-editor';
+          if(('ontouchstart' in window)||window.DocumentTouch&&document instanceof DocumentTouch)document.documentElement.className=document.documentElement.className.replace(/\bno-touch\b/,'has-touch');
+        </script>
+  		{%- if page_description -%}
+    		<meta name="description" content="{{ page_description | escape }}{% if current_tags %} {{ 'general.meta.tagged_html' | t: tags: meta_tags | escape }}.{% endif %}{% if current_page != 1 %} {{ 'general.meta.page' | t: page_number: current_page }}.{% endif %}" />
+  		{%- endif -%}
+  		{%- if settings.favicon != nil -%}
+            <link rel="shortcut icon" type="image/x-icon" href="{{ settings.favicon | img_url: '180x180' }}">
+            <link rel="apple-touch-icon" href="{{ settings.favicon | img_url: '180x180' }}"/>
+            <link rel="apple-touch-icon" sizes="57x57" href="{{ settings.favicon | img_url: '57x57' }}"/>
+            <link rel="apple-touch-icon" sizes="60x60" href="{{ settings.favicon | img_url: '60x60' }}"/>
+            <link rel="apple-touch-icon" sizes="72x72" href="{{ settings.favicon | img_url: '72x72' }}"/>
+            <link rel="apple-touch-icon" sizes="76x76" href="{{ settings.favicon | img_url: '76x76' }}"/>
+            <link rel="apple-touch-icon" sizes="114x114" href="{{ settings.favicon | img_url: '114x114' }}"/>
+            <link rel="apple-touch-icon" sizes="180x180" href="{{ settings.favicon | img_url: '180x180' }}"/>
+            <link rel="apple-touch-icon" sizes="228x228" href="{{ settings.favicon | img_url: '228x228' }}"/>
+  		{%- else -%}
+    		<link rel="shortcut icon" type="image/x-icon" href="{{ 'favicon.png' | asset_url }}">
+  		{%- endif -%}
+  		{% unless template contains 'index' or template contains 'women' %} 
+            <!-- starapps_scripts_start -->
+            <!-- This code is automatically managed by StarApps Studio -->
+            <!-- Please contact support@starapps.studio for any help -->
+			
+			<!-- starapps_scripts_end -->
+  		{% endunless %}
+		{%- if request.design_mode or template contains 'cart' or template contains 'checkout' -%}
+            {{ content_for_header }}
+        {%- else -%}
+            {% capture content_for_header2 %}{{ content_for_header }}{% endcapture %}
+            {{ content_for_header2 | replace: ' defer="defer" ', ' type="lazyload2" ' | replace: " src=", " data-src=" | replace: "window.addEventListener('load', asyncLoad, false);", "window.addEventListener('wnw_load', asyncLoad, false);" | replace: "DOMContentLoaded", "DOMContentLoaded2" }}
+            <script>var trekkie=[];trekkie.integrations=!0;</script>
+        {%- endif -%}
+        {% render 'social-meta-info' %}
+        {% if collection.previous_product %}<link rel="prev" href="{{ collection.previous_product }}">{% endif %}
+        {% if collection.next_product %}<link rel="next" href="{{ collection.next_product }}">{% endif %}
+        {% if template.name == 'customers' %}
+          	{{ "shopify_common.js" | shopify_asset_url | script_tag }}
+          	{{ "customer_area.js"  | shopify_asset_url | script_tag }}
+        {% endif %}
+        <style>
+          .min_cart{
+            display:none;
+          }
+            .gift-card .product_accoudion .pdacd_item {
+              display: none;
+          }
+         </style>
+  		{% unless template contains 'index' %}
+ 			<!--begin-boost-pfs-filter-css-->
+   			{% render 'boost-pfs-style' %}
+ 			<!--end-boost-pfs-filter-css-->
+  		{% endunless %}
+   		<!-- Pinterest Tags -->
+  		<meta name="p:domain_verify" content="05ab6bb1066e9241567ca3e2a348abbc"/>
+  		{% unless template contains 'index' %}  
+			<link rel="stylesheet" data-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" />
+  		{% endunless %}
+		<link rel="stylesheet" type="text/css" data-href="https://cdn.jsdelivr.net/npm/cookieconsent@3/build/cookieconsent.min.css" />
+  		<script> var plus_size = false; </script>
+      	<style>.shopify-payment-button__button{border-radius:4px;border:none;box-shadow:0 0 0 0 transparent;color:#fff;cursor:pointer;display:block;font-size:1em;font-weight:500;line-height:1;text-align:center;width:100%;transition:background .2s ease-in-out}.shopify-payment-button__button--unbranded{background-color:#1990c6;padding:1em 2em}body:not(.announcement-bar--visible) .announcement-container{transition:all 0s linear;height:auto}[data-scroll-class]{opacity:1!important;animation:none!important}.transition--blur-up.lazyloaded{filter:blur(0px);transform:scale(1)}@font-face{font-family:flex-icon;src:url(data:application/font-woff;base64,d09GRgABAAAAAAjkAAsAAAAACJgAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAABPUy8yAAABCAAAAGAAAABgDxIF5mNtYXAAAAFoAAAAVAAAAFQXVtKMZ2FzcAAAAbwAAAAIAAAACAAAABBnbHlmAAABxAAABKQAAASkgtBNFWhlYWQAAAZoAAAANgAAADYUX/5baGhlYQAABqAAAAAkAAAAJAesA8tobXR4AAAGxAAAACgAAAAoHgABEWxvY2EAAAbsAAAAFgAAABYFxARYbWF4cAAABwQAAAAgAAAAIAAMAJluYW1lAAAHJAAAAZ4AAAGedfd0W3Bvc3QAAAjEAAAAIAAAACAAAwAAAAMDtwGQAAUAAAKZAswAAACPApkCzAAAAesAMwEJAAAAAAAAAAAAAAAAAAAAARAAAAAAAAAAAAAAAAAAAAAAQAAA6QUDwP/AAEADwABAAAAAAQAAAAAAAAAAAAAAIAAAAAAAAwAAAAMAAAAcAAEAAwAAABwAAwABAAAAHAAEADgAAAAKAAgAAgACAAEAIOkF//3//wAAAAAAIOkA//3//wAB/+MXBAADAAEAAAAAAAAAAAAAAAEAAf//AA8AAQAAAAAAAAAAAAIAADc5AQAAAAABAAAAAAAAAAAAAgAANzkBAAAAAAEAAAAAAAAAAAACAAA3OQEAAAAAAQAuAMUD0gK7AFIAABMuASceARceARceARceARceARc2Nz4BNzY3DgEVPgE3DgEHMSY2Nw4BBz4BNw4BBz4BNw4BBzcGBw4BBwYHDgEjIiYnMScmJy4BJyYnLgEnHgEXjhslHyRPLg0dDQ0aDhElER49HiAhIUEhISAEDiBQHw8gEQEGAwgMAwseDQIXBR5OHw8gEQElLS1iNDQzBQ0IBw4FJSUsLFkrKiMWIAwYLhoCSB41IBBDLA0WDA0dDhIgEB08HiEhID8eHxwIEQUgTR4UJRECBgMDEgUHHwsGFwgaRCAZKxQBLC8wZTU0NQUFBQUmJi0sXS0uKBgfERUrFAAAAAABAF4AGQOnA10AlgAAJS4BJx4BFy4BBx4BHwEuAScyFhcmJy4BJyYnNjc+ATc2Nz4BPwEOAQc+ATcOAQc+ATcOARc+AT8BDgEHNDY3BgcOAQcGBy4BJy4BJy4BJy4BJy4BJx4BFy4BJx4BFxYXHgEXFh8BDgEHDgEHDgEHDgEHDgEHPgE3DgEHPgE3Njc+ATc2PwEWFx4BFxYXHgEfAS4BJx4BFwNIChsGBBECAwUBDyARAhxDHAUPBxkaGjccHR0sKytRJSUgDxsMARxHGgQVAQwbCgMLBwIGAQ8dDAEcSB0MBB0dHjodHR0bNRoQIg8NFg0MGgsqSCEcIBgXKhYLHRMfJiZQKCciCBozGQ8cEAwaCwsTCyY8DR0wGxImExAcFSQoKFIoJyIIKywrUycoJBEmFQMdPBcHFAZ8DBsKAwsHAgYBDx0MARxIHQwEHR0eOh0dHSssK1MnKCQRJhUDHTwXBxQGChsFBBEBAgYBDyASARtEHAUPBxgbGjccHR0aNBkOHBAMGgwLEwonOw0dLxsRJhMQHBUjKShSKCciCRo2Gg8iEAwXDA0ZDClJIRwhFxcqFQodEyAmJlAoJyIILCsrUSUlIA8bDAEcRxoEFQEAAAABABYAnAPqAscABQAAJQE3CQEXAgD+FjoBsAGwOpwB8Tr+SQG3OgAAAQAz//MDzQONAAsAAAEnCQEHCQEXCQE3AQPNN/5q/mo3AZf+aTcBlgGWN/5pA1Y3/mkBlzf+av5qNwGX/mk3AZYAAAABAB4AwgPhAr8ALAAAAS4BIyIGBzEHDgEHCQEuAScxJy4BIyIGFRQWFzEBHgEzMjY3MQE+ATU0JicxA9sDBwQFBwNjAgQC/q3+rQIEAmMDCAUIDAQDAcwDCAQECAMBzAMDAwMCuQIDAwJlAQIC/q0BUwICAWQDBAwIBQgC/iwDAwMDAdQCCAQECAMAAAEAHv/eA+ADoAAvAAAJAT4BNTQmIyIGBzEJAS4BIyIGFRQWFzEJAQ4BFRQWMzI2NzEJAR4BMzI2NTQmJzECHQG+AwIMCAQHA/5C/kIDBwQIDAIDAb7+QgQDDAgFCAMBvgG+AwcECAwCAwHAAb4DBwQIDAID/kIBvgMCDAgEBwP+Qv5CAwgFCAwDBAG+/kIDAgwIBAcDAAAAAQAAAAEAAIAWuVFfDzz1AAsEAAAAAADYq1zwAAAAANirXPAAAP/eA+oDoAAAAAgAAgAAAAAAAAABAAADwP/AAAAEAAAAAAAD6gABAAAAAAAAAAAAAAAAAAAACgQAAAAAAAAAAAAAAAIAAAAEAAAuBAAAXgQAABYEAAAzBAAAHgQAAB4AAAAAAAoAFAAeAKABigGeAcACBgJSAAAAAQAAAAoAlwABAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAA4ArgABAAAAAAABAAkAAAABAAAAAAACAAcAcgABAAAAAAADAAkAPAABAAAAAAAEAAkAhwABAAAAAAAFAAsAGwABAAAAAAAGAAkAVwABAAAAAAAKABoAogADAAEECQABABIACQADAAEECQACAA4AeQADAAEECQADABIARQADAAEECQAEABIAkAADAAEECQAFABYAJgADAAEECQAGABIAYAADAAEECQAKADQAvGZsZXgtaWNvbgBmAGwAZQB4AC0AaQBjAG8AblZlcnNpb24gMS4wAFYAZQByAHMAaQBvAG4AIAAxAC4AMGZsZXgtaWNvbgBmAGwAZQB4AC0AaQBjAG8AbmZsZXgtaWNvbgBmAGwAZQB4AC0AaQBjAG8AblJlZ3VsYXIAUgBlAGcAdQBsAGEAcmZsZXgtaWNvbgBmAGwAZQB4AC0AaQBjAG8AbkZvbnQgZ2VuZXJhdGVkIGJ5IEljb01vb24uAEYAbwBuAHQAIABnAGUAbgBlAHIAYQB0AGUAZAAgAGIAeQAgAEkAYwBvAE0AbwBvAG4ALgAAAAMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=) format("woff");font-weight:400;font-style:normal;font-display:swap}</style>
+      	<style class="critical2">.header,.mobile-header{letter-spacing:1px!important}header .navbar-link{padding:1rem 4px}header .navbar-link{padding:1rem 4px}@media only screen and (min-width:1024px){.clhd_slider:not(.flickity-enabled) .clhd_item:nth-child(n+6){display:none}}.price-ui.price-container{opacity:1!important}.price-ui.price-ui--loading.price-container .compare-at-price{display:none}@media only screen and (max-width:388px){#announcement-bar__shadow{min-height:43px!important}}.page-navigation-arrows .page-navigation__divider{padding:0 5px}#announcement-bar__shadow{min-height:25.5px}.clhd_slider{opacity:1!important;display:-webkit-box}</style>
+	</head>
+    {%- capture money_format_output -%}
+      {%- if settings.currency_format == 'money_with_currency_format' -%}
+        {{- shop.money_with_currency_format | strip_html -}}
+      {%- else -%}
+        {{- shop.money_format | strip_html -}}
+      {%- endif -%}
+    {%- endcapture -%}
+    <body vdk
+      class=" {{ product.handle }}
+        {%- if template.name == '404' -%}
+          error-404
+        {% else -%}
+          {{ template | replace: '.', '-' | handle }}
+        {%- endif -%}
+        {% if settings.header_layout == 'vertical' -%}
+          has-vertical-header
+        {%- endif -%}
+      "
+      data-money-format="{{ money_format_output }}"
+      data-shop-url="{{ shop.url }}"
+      data-current-lang="{{ request.locale.iso_code }}"
+    >
+  		{% comment %}Inject css-variables begin{% endcomment %}
+        {% style %}
+          :root {
+            --color-body-text: {{ settings.regular_color }};
+            --color-body: {{ settings.shop_bg_color }};
+            --color-bg: {{ settings.shop_bg_color }};
+          }
+        {% endstyle %}
+  		{% comment %}Inject css-variables end{% endcomment %}
+        {% comment %}Inject @pixelunion/shopify-price-ui/price-ui-globals begin{% endcomment %}
+        {%- capture price -%}{%- render 'price-ui-templates', template: 'price' -%}{%- endcapture -%}
+        {%- capture price_percent -%}{%- render 'price-ui-templates', template: 'price-percent' -%}{%- endcapture -%}
+        {%- capture price_min -%}{%- render 'price-ui-templates', template: 'price-min' -%}{%- endcapture -%}
+        {%- capture price_max -%}{%- render 'price-ui-templates', template: 'price-max' -%}{%- endcapture -%}
+        {%- capture unit_quantity -%}{%- render 'price-ui-templates', template: 'unit-quantity' -%}{%- endcapture -%}
+        {%- capture unit_price -%}{%- render 'price-ui-templates', template: 'unit-price' -%}{%- endcapture -%}
+        {%- capture unit_measurement -%}{%- render 'price-ui-templates', template: 'unit-measurement' -%}{%- endcapture -%}
+        <template id="price-ui">{%- render 'price-ui-templates', template: 'price-ui' -%}</template>
+        <template id="price-ui-badge">{%- render 'price-ui-templates', template: 'price-ui-badge' -%}</template>
+        <template id="price-ui__price">{{ price }}</template>
+        <template id="price-ui__price-range">{{- 'product.price.range_html' | t: price_min: price_min, price_max: price_max -}}</template>
+        <template id="price-ui__unit-pricing">{{- 'product.price.unit_pricing_html' | t: unit_quantity: unit_quantity, unit_price: unit_price, unit_measurement: unit_measurement -}}</template>
+        <template id="price-ui-badge__percent-savings-range">{{- 'product.badge.sale_percentage_range_html' | t: price_percent: price_percent -}}</template>
+        <template id="price-ui-badge__percent-savings">{{- 'product.badge.sale_percentage_single_html' | t: price_percent: price_percent -}}</template>
+        <template id="price-ui-badge__price-savings-range">{{- 'product.badge.sale_money_range_html' | t: price: price -}}</template>
+        <template id="price-ui-badge__price-savings">{{- 'product.badge.sale_money_single_html' | t: price: price -}}</template>
+        <template id="price-ui-badge__on-sale">{{- 'product.badge.sale' | t -}}</template>
+        <template id="price-ui-badge__sold-out">{{- 'product.badge.sold_out' | t -}}</template>
+        <template id="price-ui-badge__in-stock">{{- 'product.badge.in_stock' | t -}}</template>
+        {% comment %}Inject @pixelunion/shopify-price-ui/price-ui-globals end{% endcomment %}
+        {%- if settings.show_announcement_bar -%}
+          	{% section 'announcement-bar' %}
+        {%- endif -%}
+        {%- if settings.header_layout == "classic" -%}
+          	{% section 'header__top-bar' %}
+          	{% section 'header-classic' %}
+        {%- elsif settings.header_layout == "centered" -%}
+          	{% section 'header-centered__top-bar' %}
+          	{% section 'header-centered' %}
+        {%- elsif settings.header_layout == "vertical" -%}
+          	{% section 'header-vertical' %}
+        {%- elsif settings.header_layout == "search_focus" -%}
+          	{% section 'header__top-bar' %}
+          	{% section 'header-search-focus' %}
+        {%- endif -%}
+  		{%- if settings.cart_action == 'drawer' -%}
+    		{% render 'ajax-cart' %}
+  		{%- endif -%}
+        {% if settings.mega_menu_1 == true %}
+          	{% section 'mega-menu-1' %}
+        {% endif %}
+        {% if settings.mega_menu_2 == true %}
+          	{% section 'mega-menu-2' %}
+        {% endif %}
+        {% if settings.mega_menu_3 == true %}
+          	{% section 'mega-menu-3' %}
+        {% endif %}
+        {% if settings.mega_menu_4 == true %}
+          	{% section 'mega-menu-4' %}
+        {% endif %}
+        {% if settings.mega_menu_5 == true %}
+          	{% section 'mega-menu-5' %}
+        {% endif %}
+        {% if settings.mega_menu_6 == true %}
+          	{% section 'mega-menu-6' %}
+        {% endif %}
+        {% if settings.mega_menu_7 == true %}
+          	{% section 'mega-menu-7' %}
+        {% endif %}
+        {% if settings.mega_menu_8 == true %}
+          	{% section 'mega-menu-8' %}
+        {% endif %}
+        {% if settings.mega_menu_9 == true %}
+          	{% section 'mega-menu-9' %}
+        {% endif %}
+        {% if settings.mega_menu_10 == true %}
+          	{% section 'mega-menu-10' %}
+        {% endif %}
+  		{% if settings.header_layout == "vertical" %}
+    		<div class="is-beside-vertical-header">
+  		{% endif %}
+        <div id="template-{{ template | replace: '.', '-' | handle }}" data-check-for-order="true">
+          	<div class="dynamic-sections">
+            	{{ content_for_layout }}
+          	</div>
+        </div>
+        {% if settings.footer_layout == "centered" %}
+          	{% section 'footer__icon-bar' %}
+          	{% section 'footer-centered' %}
+        {% elsif settings.footer_layout == "classic" %}
+          	{% section 'footer__icon-bar' %}
+          	{% section 'footer-classic' %}
+        {% elsif settings.footer_layout == "promotional" %}
+          	{% section 'footer__icon-bar' %}
+          	{% section 'footer-promotional' %}
+        {% endif %}
+        {% if settings.header_layout == "vertical" %}
+      		</div>
+        {% endif %}
+  		{% if settings.show_fixed_message %}
+    		{% section 'fixed-message' %}
+  		{% endif %}
+  		{% if settings.enable_quickshop %}
+    		{% render 'quick-shop' %}
+  		{% endif %}
+  		{% if settings.search_display_style == 'popup' %}
+    		{% render 'search-popup' %}
+  		{% endif %}
+  		{% if settings.show_popup %}
+    		{% section 'popup' %}
+  		{% endif %}
+  		{% render 'mobile-search' %}
+  		{% render 'structured-data' %}
+  		{% unless template contains 'index' %} 
+ 			<!--begin-boost-pfs-js-->
+   			{% render 'boost-pfs' %}
+ 			<!--end-boost-pfs-js-->
+  		{% endunless %}
+        <!-- **BEGIN** Hextom FSB Integration // Main Include - DO NOT MODIFY -->
+        {% render 'hextom_fsb_main', product: product, customer: customer %}
+        <!-- **END** Hextom FSB Integration // Main Include - DO NOT MODIFY -->
+        <script type="lazyload2">
+          setTimeout(function(){
+            var preloadLink = document.createElement("link");
+            preloadLink.href = "https://cdn.jsdelivr.net/npm/cookieconsent@3/build/cookieconsent.min.js";
+            preloadLink.rel = "preload";
+            preloadLink.as = "script";
+            document.head.appendChild(preloadLink);
+            window.cookieconsent.initialise({
+              "palette": {
+                "popup": {
+                  "background": "#afa899"
+                },
+                "button": {
+                  "background": "#ffffff",
+                  "text": "#000",
+                  "border-width":"5px",
+                  "border":"#edebe4"
+
+                }
+              },
+              "position": "bottom-right",
+              "content": {
+                "message": "This website uses cookies to ensure you get the best experience on our website. You consent to our cookies if you continue to use this website.",
+                "href": "https://bedheadpjs.com/pages/privacy-policy"
+              }
+            });
+          }, 10000);
+
+        </script>
+        <style>
+          .cc-btn{
+            border-width:5px
+          }
+
+        </style>
+  		{% include 'adroll' %} 
+      	<!--UserWay-->
+        <script type="lazyload2">
+          setTimeout(function(){
+            var preloadLink = document.createElement("link");
+            preloadLink.href = "//code.tidio.co/nf8wt7pefoasjkrultz4pumihoqyrky3.js";
+            preloadLink.rel = "preload";
+            preloadLink.as = "script";
+            document.head.appendChild(preloadLink);
+            (function(d){
+              var s = d.createElement("script");
+              /* uncomment the following line to override default position*/
+              /* s.setAttribute("data-position", 3);*/
+              /* uncomment the following line to override default size (values: small, large)*/
+              /* s.setAttribute("data-size", "small");*/
+              /* uncomment the following line to override default language (e.g., fr, de, es, he, nl, etc.)*/
+              /* s.setAttribute("data-language", "language");*/
+              /* uncomment the following line to override color set via widget (e.g., #053f67)*/
+              /* s.setAttribute("data-color", "#053e67");*/
+              /* uncomment the following line to override type set via widget (1=person, 2=chair, 3=eye, 4=text)*/
+              /* s.setAttribute("data-type", "1");*/
+              /* s.setAttribute("data-statement_text:", "Our Accessibility Statement");*/
+              /* s.setAttribute("data-statement_url", "http://www.example.com/accessibility")";*/
+              /* uncomment the following line to override support on mobile devices*/
+              /* s.setAttribute("data-mobile", true);*/
+              /* uncomment the following line to set custom trigger action for accessibility menu*/
+              /* s.setAttribute("data-trigger", "triggerId")*/
+              s.setAttribute("data-account", "EGtHPyEp9V");
+              s.setAttribute("src", "https://cdn.userway.org/widget.js");
+              (d.body || d.head).appendChild(s);})(document)
+
+          }, 7000);
+        </script>
+        <noscript>
+          Please ensure Javascript is enabled for purposes of 
+          <a href="https://userway.org">website accessibility</a>
+        </noscript>
+    	<!--UserWay End-->  
+  		{% unless template contains 'index' or template contains 'women' or template contains 'collection' %} 
+  			{% render 'afterpay' %}
+  		{% endunless %}
+		{% include 'zinrelo-integration' %}
+      	<script type="lazyload2">
+			setTimeout(function() {
+				var hero_media = document.querySelectorAll("video");
+				hero_media.forEach(function(val) {
+					val.load();
+					val.loop="true";
+					val.muted="muted";
+					val.play();
+				});
+			}, 1000);
+        </script>
+
+    
+        <script>
+          var site_nav_link_burger = true;
+           
+          jQuery(document).ready(function() {
+            jQuery(".mobile-menu__toggle-button").click(function() { 
+              if(site_nav_link_burger) {
+                event.preventDefault();
+                site_nav_link_burger = false;
+               
+              }
+            });
+          }) 
+        </script>
+       
+      	{{ 'wnw-optimization.js' | asset_url | script_tag }}
+	</body>
+</html>
+{% endcapture %}
+{% assign content = content | replace_first: '<!doctype', '!doctype' | split: ' <' %}
+{%- for html in content -%}{%- assign htmlblock = html | strip | prepend: ' <' -%}{{htmlblock | replace: ' </', '</'}}{%- endfor -%}
+
