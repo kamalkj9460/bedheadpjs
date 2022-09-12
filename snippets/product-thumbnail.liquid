@@ -140,7 +140,7 @@
                 </div>
               {% elsif product.media[1].media_type == 'video' %}
                 <div class="product-thumbnail__video secondary swap--visible video-on-hover" data-html5-video>
-                  {{ product.media[1] | video_tag: controls: false }}
+                  {{ product.media[1] | video_tag: controls: false | replace: 'preload="metadata"', 'preload="none"' | replace: 'poster=', 'data-poster=' }}
                 </div>
               {% else %}
                 {%

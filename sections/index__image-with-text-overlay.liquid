@@ -126,7 +126,7 @@
       {% if section.settings.video != blank %}
         
           <div tabindex="-1" class="index_video2" data-id="{{ section.settings.video}}">
-            <video data-id="{{ section.settings.video}}" preload="none" playsinline muted data-poster="{{ image | img_url: '1400x' }}"
+            <video data-id="{{ section.settings.video}}" preload="none" playsinline muted poster="{{ image | img_url: '1400x' }}"
                    class="video_box">
               <source src="{{ section.settings.video}}" type="video/mp4" />
             </video>
